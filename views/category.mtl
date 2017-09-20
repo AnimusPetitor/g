@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+   <!-- ---- Clean html template by http://WpFreeware.com ---- This is the main file (index.html). ---- You are allowed to change anything you like. Find out more Awesome Templates @ wpfreeware.com --> 
+   <head>
+      <title>#title#</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- Font Awesome --> 
+      <link rel="stylesheet" href="css/font-awesome.min.css">
+      <link rel="stylesheet" href="font/font.css">
+      <link href="css/style.css" rel="stylesheet" media="screen">
+      <link href="css/responsive.css" rel="stylesheet" media="screen">
+      <script async type="text/javascript" src="js/webpjs-0.0.2.min.js"></script>
+   </head>
+   <body>
+      <div class="fix header_area">
+         <div class="fix wrap header">
+            <div class="logo floatleft"> <img src="images/logo.png"/> </div>
+            <div class="manu floatright">
+               <img id src="images/play.png"/> <!--<ul id="nav-top"> <li><a href="index.html">Home</a></li> <li><a href="single.html">single</a></li> <li><a href="about.html">about</a></li> <li><a href="contact.html">contact</a></li> </ul>--> 
+            </div>
+         </div>
+      </div>
+      <!--Clean template by WpFreeware.com--> 
+      <div class="fix content_area">
+         <div class="fix top_add_bar">
+            <div class="addbar_leaderborard"><img src="https://placehold.it/728x90"/></div>
+         </div>
+         <div class="manu_area">
+            <div class="mainmenu menu-wrap wrap">
+               <ul id="nav-bottom">
+                  <li><a href="News">Headlines</a></li>
+                  <li><a href="Entertainment">Entertainment</a></li>
+                  <li><a href="Technology">Technology</a></li>
+                  <li><a href="Social">Society</a></li>
+                  <li><a href="Sport">Sport</a></li>
+                  <li><a href="Politics">Politics</a></li>
+                  <li><a href="Art and Culture">Art and Culture</a></li>
+                  <li><a href="Business">Business</a></li>
+                  <li><a href="World">World</a></li>
+                  <li><a href="Health">Health</a></li>
+                  <li><a href="Video">Video</a></li>
+                  <li><a href="Audio">Audio</a></li>
+               </ul>
+            </div>
+         </div>
+         <div class="fix wrap content_wrapper">
+            <div class="fix content">
+               <div class="fix main_content floatleft">
+                  <div class="fix single_content_wrapper"> </div>
+                   #listTitle#
+
+                  <div class="pagination fix"> </div>
+               </div>
+               <div class="fix sidebar floatright">
+                  <div class="fix single_sidebar">
+                     <h2>Search</h2>
+                     <form action="/search" method="get"><input name="q" class="search" type="text"  placeholder="Search ZGazeta"/></form>
+                  </div>
+                  <div class="fix single_sidebar">
+                     <div class="popular_post fix">
+                        <h2>Popular</h2>
+                     </div>
+                  </div>
+                  <div class="fix single_sidebar">
+                     <h2>Categories</h2>
+                     <a href="/c1">photography(5)</a> <a href="/c2">food(9)</a> <a href="/c3">Salads(4)</a> <a href="/c4">spicy(3)</a> <a href="/c5">Wine(5)</a> 
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="fix bottom_add_bar">
+            <div class="addbar_leaderborard"><img src="https://placehold.it/728x90"/></div>
+         </div>
+      </div>
+      <!--Clean template by WpFreeware.com--> 
+      <div class="fix footer_area">
+         <div class="fix wrap footer">
+            <div class="fix copyright_text floatleft">
+               <p>Designed By <a href="http://www.wpfreeware.com" rel="nofollow">WpFreeware</a></p>
+            </div>
+            <div class="fix social_area floatright">
+               <ul>
+                  <li><a href="" class="feed"></a></li>
+                  <li><a href="" class="facebook"></a></li>
+                  <li><a href="" class="twitter"></a></li>
+                  <li><a href="" class="drible"></a></li>
+                  <li><a href="" class="flickr"></a></li>
+                  <li><a href="" class="pin"></a></li>
+                  <li><a href="" class="tumblr"></a></li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <script type="text/javascript" src="js/selectnav.min.js"></script> <script type="text/javascript"> selectnav("nav", { label: "-Navigation-", nested: true, indent: "-" }); </script> <script src="http://code.jquery.com/jquery.js"></script> <!-- This Template is designed by WpFreeware.com Team, You are allowed to change anything you like. Find out More Awesome template at http://www.WpFreeware.com. --> 
+   </body>
+</html>
+

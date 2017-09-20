@@ -1,0 +1,9 @@
+node_modules/
+npm-debug.log
+.DS_Store
+/*.env
+s.class
+s.java
+a.txt
+okio/
+okhttp/
