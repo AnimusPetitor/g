@@ -303,7 +303,7 @@ var searchoptions = {
     searchable: true,
     indexPath: 'news',
     logLevel: 'error',
-    nGramLength: 7,
+    nGramLength: 1,
     nGramSeparator: ' ',
     separator: /[' ፥«»፣።.,|(\n)]+/,
     stopwords:sw.en,
@@ -326,6 +326,7 @@ var Searchindex ;
 var SearchIndex = require('search-index');
 SearchIndex(searchoptions, function(err, inde) {
     Searchindex = inde; 
+    //console.log(inde.getOptions());
     //ll.tellMeAboutMySearchIndex(function (err, info) {
   //console.log(info)
 //})
@@ -494,7 +495,7 @@ function searchDb(inp,c,e){
     .on('data', function(doc) {
      if(doc.document.hash){
       //bot.sendMessage(381956489,doc.document.link);
-      list.push(doc.document.hash);
+      if(!list.includes(doc.document.hash))list.push(doc.document.hash);
     }
   }).on('finish',function(){
     c(list);
@@ -798,6 +799,7 @@ function indexByLangCateg(i,lang){
 firebaseCache.put('catIndex',new Map());
    var catIndex = firebaseCache.get("catIndex");
 var startIndex = function(){
+	total = 0;
     for(var i = 0; i < CATEGORIES.length; i++){
       indexByLangCateg(i, 'am',catIndex);
     } 
@@ -877,8 +879,9 @@ function start(){
   try{
   var links = Object.values(snap.val());
   for(var l = 0; l < links.length; l++){
-    if(getFileName(links[l]).replace(/\.|\//g,'')==='enagovet' && /http:\/\/www\./.test(links[l].slice(0,14))){ links[l] = links[l].replace(/http:\/\/www\./,'http://');
-     consola.info(links[l]);
+    if(getFileName(links[l]).replace(/\.|\//g,'')==='enagovet' && /http:\/\/www\./.test(links[l].slice(0,14))){ 
+    	links[l] = links[l].replace(/http:\/\/www\./,'http://');
+     //consola.info(links[l]);
    }
   }
   firebaseCache.put('__-articles-__',links);
@@ -897,7 +900,7 @@ function buildSearchI(){
       var i = 0;
       for(var hash in list){
        allh.push(hash); 
-       if(GAZETA.force){
+       if(GAZETA.force ){//&& 'enagovet'===list[hash].source){
         var tbi = list[hash];
         
         if(tbi.body){

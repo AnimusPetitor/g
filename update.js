@@ -210,6 +210,7 @@ function covet_webp(dat, response){
 
         if(!err){
         consola.info("downloaded image. Converting to webp", dat.val); 
+         console.log(typeof body + "L" + body); 
          sharp(body).webp().on('error',function(err) {
                                 consola.info('Error converting to webp',dat.val);
                                  bot.sendMessage(381956489,'2 '+dat.news.link);  
@@ -450,7 +451,7 @@ function fetch(template, link,source,response, body, cat,covet_web){
                           
                              
                            }
-                         console.log('SS'+ret); 
+                         //console.log('SS'+ret); 
                          val = ret; 
                            }
                         }
@@ -653,15 +654,19 @@ module.exports.postArt = function(news, categories){
   pArt(news,categories); 
 }
 function pArt(news, categories){
+  console.log(news);
   if(news.body)
     try{
       var din = news.body.indexOf(news.date);
+      console.log('s1');
       if(din > -1)news.body.splice(din,1);
       din = news.body.indexOf(news.title);
+      console.log('s2');
       if(din > -1)news.body.splice(din,1);   
+      console.log(news.synop);
+      if(!news.synop || news.synop.length <= 50 || news.synop.startsWith('***')) 
       for(var x = 0; x < news.body.length; x++){
-       if((!news.synop || news.synop.length <= 50 || news.synop.startsWith('***')) 
-            && !news.body[x].startsWith('***')){ 
+       if(!news.body[x].startsWith('***') && news.body[x].length > 50){ 
           var text = news.body[x].length > 200 ? news.body[x].substring(0, 200): news.body[x];
           news.synop = text.replace(/[\n]+/g,'');
           break;
@@ -669,7 +674,7 @@ function pArt(news, categories){
       }   
     }catch(e){consola.error("csynop",e); }
   //db.ref('/ethiopia/').set({}); return;
-  if(Object.keys(news).length<=4 || !news.title) {return; bot.sendMessage(381956489,news.title+news.link); }try{delete news.failcount;}catch(e){}
+  if(Object.keys(news).length<=4 || !news.title || !(news.body || news.cover_audio)) {return; bot.sendMessage(381956489,news.title+news.link); }try{delete news.failcount;}catch(e){}
    try{
       //var article = '<b>'+news.title+'</b>\n'+ (news.synop?'<pre>'+news.synop+'</pre>':  (news.body && news.body.length > 0  ? news.body[0]:''));
         //         article += '\n<a href="'+ news.link +'">Open in Browser</a>\nposted a new article!'; 
@@ -711,7 +716,7 @@ function pArt(news, categories){
     //db.ref('/ethiopia/newsL/')).push(news); 
     db.ref('/ethiopia/source/'+source+'/'+hash).set(news.timestamp);
     consola.info("SAVED",hash,news);
-    //firebaseCache.get('__-articles-__').push(link);
+    firebaseCache.get('__-articles-__').push(link);
    }catch(e){consola.error("error saving to db",e);}
    //batch indexing is faster, on hold
    //consola.info("updating cache and index");
@@ -779,7 +784,7 @@ function getNewLinks(linko, template,response, body,force){
 
                  if(!force){ 
                   nlinks.push(link);
-                  index.push(link);
+                  //index.push(link);
 
                  } else nlinks.push({link:link, title: l.textContent.trim().length>0 
                         ? l.textContent.replace(/^[(\\n)\s]+|[(\\n)\s]+$|[^\w][\n]+[^\w]/g,''):
