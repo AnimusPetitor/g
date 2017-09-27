@@ -837,7 +837,7 @@ function update(sss,force){
   for(var link in seeds){  
   try{
    var sauce = getFileName(link.trim()).replace(/\.|\//g,''); 
-
+   console.log(sss+":"+link);
    if((link.length>0 && !sss) || (link.length>0 && sss && (sss.length==0 || sss.includes(sauce)) ) ){
        (function(meta, link,sss){
        	var opts = {link:link,address:meta.address};
