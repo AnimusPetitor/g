@@ -601,30 +601,60 @@ function fetch(template, link,source,response, body, cat,covet_web){
                               }
                               if(!hasVideo && !hasAudio && !hasPhoto && childs[l].textContent.trim().length>0){
                                 console.log(childs[l].innerHTML);  
-                                if(childs[l].querySelector("img") 
-                                    || childs[l].querySelector("em")
+                      if(childs[l].querySelector("img")
+                                  || childs[l].querySelector("em")
                                     || childs[l].querySelector("a")
                                     || childs[l].querySelector("strong")){
+                                
                                    walkBody(childs[l], function (node) {
-                                      if (node.nodeType === 3) {
-                                          var text = node.data.trim();
+                                      //console.log(node);
+                                     if (node.nodeType === 3 ) {
+                                          var lat = ret[ret.length-1];
+                                         // if(lat && lat.slice(lat.length-3)===';% ') {
+                                           // if(node.previousSibling && node.previousSibling.nodeType==='A'){
+                                             // return;
+                                            //}
+                                          //}
+                                          var text = node.data.replace(/[\n\u00A0]+/g,'').trim();
                                           if (text.length > 0) {
-                                            ret.push(text);
-                                          }
+                                            //if(lat.slice(lat.length-3)!==';% ') ret.push(text);
+                                            //else
+                                            
+                                            if(!ret[ret.length-1].startsWith("***")) ret[ret.length-1] += text + ' ';
+                                            else ret.push(text);
+                                       }
                                       }else if(node.nodeType === 1){
+                                        try{
+                                        var lat = ret[ret.length-1];  
                                         if(node.nodeName==="IMG"){
-                                         ret.push("***"+node.src);
-                                        }else if(node.nodeName==="em"){
-                                         ret.push(">E>"+node.textContent+"/>");   
-                                        }else if(node.nodeName==="b"){
-                                         ret.push(">B>"+node.textContent+"/>");   
-                                        }else if(node.nodeName==='a'){
-                                          console.log("LIIIINK"+node.textContent);  
-                                         ret.push("<<"+node.textContent+'/>'+node.href);     
-                                        }else if(node.nodeName==='strong'){
-                                          ret.push(">>"+node.textContent+"/>");   
+                                            var src  = node.src;
+                                           if(src && src.startsWith('/')) src = 'http://'+getFileName(link)+src;
+                                           ret.push("***"+src);
+                                        }else if(node.nodeName.startsWith("H") && node.nodeName.length===2){
+                                          ret.push("***"+node.textContent); 
+                                        }else if(node.nodeName==="EM"){
+                                         if(!lat.startsWith('***'))ret[ret.length-1] = ret[ret.length-1] + " %EM%"+node.textContent+"EM;% ";
+                                         else ret.push(" %EM%"+node.textContent+" EM;% ");   
+                                        }else if(node.nodeName==="B"){
+                                         //ret[ret.length-1] = ret[ret.length-1] + "%B%"+node.textContent+"B;%";   
+                                        }else if(node.nodeName==='A'){
+                                          if(!node.href) return;
+                                         
+                                          //var mark =  " %A%"+node.textContent.trim()+node.href +'A;% ';
+                                         //if(!lat.includes(mark))
+                                          if(!lat.startsWith('***'))ret[ret.length-1] = lat + " %A"+node.textContent.trim()+"%"+node.href +'A;% ';   
+                                          else ret.push(" %A"+node.textContent.trim()+"%"+node.href +'A;% ');  
+                                        }else if(node.nodeName==='STRONG'){
+                                          //ret[ret.length-1] = ret[ret.length-1] + ">>"+node.textContent+"/>";   
+                                        }else if(node.nodeName==='P'){
+                                          //ret.push();
+                                          ret.push('');
+                                          //ret[ret.length-1] = ret[ret.length-1] + ">>"+node.textContent+"/>";   
+                                        }else {
+                                          console.log(node.nodeName);
                                         }
-                                      } 
+                                       }catch(e){console.log(e);}
+                                      }
                                   });  
                                 }
                                 else {
