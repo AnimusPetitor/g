@@ -39,7 +39,9 @@ db.ref('/source/').once('value').then(function(snapshot) {
 var sourcArr ;
 const bot_users = new Map();
 const TeleBot = require('telebot');
-global.bot = new TeleBot('409679078:AAGHzBfXrW8AEFnVe03MWXCPbyM7Q_1RhkU');
+global.bot = new TeleBot('475582028:AAFljGnXcFBuyDCQop-mf8qqDVA9JtWA0NY');
+//409679078:AAGHzBfXrW8AEFnVe03MWXCPbyM7Q_1RhkU
+
 function scrapAndSend(link,bot,msg,put){
   var v = put == 2; 
   console.log(v);
@@ -161,8 +163,21 @@ bot.on('text', (msg) => {
           }catch(e){consola.info(e);}    ;
         });
     }else {
-
-        if(msg.text.startsWith('/c ')){
+    	if(msg.text.startsWith('/gdel ')){
+    	    del(msg.text.slice(6));		
+    	}	
+        else if(msg.text.startsWith('/gupdate')){
+          console.log(msg.text.trim().length);	
+          if(msg.text.trim().length==8){
+           update([]);
+          }else{
+          	var sources = msg.text.slice(8).split(/ +/);
+          	
+          	update(sources,sources[sources.length-1].length==2);
+          	console.log(msg.text.slice(9).split(/ +/) );
+          }
+        }
+        else if(msg.text.startsWith('/c ')){
           if(!sourcArr){
             sourcArr = Array.from(sources.keys());
           }
@@ -344,7 +359,7 @@ String.prototype.hashCode = function() {
 };
 
 
-const Readable = require('stream').Readable;
+const Readable = require('stream').PassThrough;
 global.store = new Readable( {objectMode: true} );
 
 //____________----------------------_____________________-------------------------______________________---------------------________-
@@ -516,6 +531,7 @@ app.get('/related', (req, res)=>{
       res.send(list);
    });
 });
+
 
 //app.use('/', (request, response, next) => { 
 app.get('/', (request, response) => { 
@@ -808,7 +824,7 @@ var startIndex = function(){
     }     
 };
 
-function update(){
+function update(sss,force){
   store = new Readable( {objectMode: true} );
   store.on('error',function (e){
   	console.log(e);
@@ -816,11 +832,19 @@ function update(){
   scrapper.seeds("all",function(seeds){
   consola.info('seeds',seeds);
   var nacount = 0;
+ 
   var linksize = Object.keys(seeds).length;
   for(var link in seeds){  
-   if(link.length>0){
-       (function(meta, link){
-        scrapper.newSubseeds({link:link,address:meta.address}, function(resp){
+   var sauce = getFileName(link.trim()).replace(/\.|\//g,''); 
+   if((link.length>0 && sss.length==0) || (link.length>0 && sss.length>0 && sss.includes(sauce)) ){
+       (function(meta, link,sss){
+       	var opts = {link:link,address:meta.address};
+       	if(sss){
+       		if(force) opts.force = true;
+       		//opts.force = true;
+       		opts.new = true;
+       	}
+        scrapper.newSubseeds(opts, function(resp){
           consola.info("SubSEEDs",meta,link,resp);
           if(!resp || resp.length===0){
             linksize--;
@@ -836,22 +860,23 @@ function update(){
              //consola.info(firebaseCache.get('__-articles-__').length);
              //if(!firebaseCache.get('__-articles-__').includes(resp[i]))
              scrapper.getNewArticle({link:resp[i], covet_webp:true,cat:meta.cat}, function(res,cat){
-               if(!res ||  !cat) {nacount--;}
+               if(!res ||  !cat) {}
                else {
                  scrapper.postArt(res,cat);
-                 nacount--;
               }
+               nacount--;
                consola.info(nacount);
+               bot.sendMessage(381956489,'Remaining news: '+nacount); 
                if(nacount===0){
-                  setTimeout(update, 100000);
+                  //setTimeout(update, 100000);
                   setTimeout(function (){
                   	 try{
                   	  store.push(null);  
     				  store.pipe(Searchindex.defaultPipeline()).pipe(Searchindex.add()); 
                   	  consola.info("UPDATE DONE!");
-                  	  startIndex();
+                  	  //startIndex();
                   	 }catch(e){console.log(e);}
-                     }, 6000);
+                     }, 10000);
                   //setTimeout(
                   //startIndex();//,180000);
                   //buildSearchI();
@@ -862,7 +887,7 @@ function update(){
              //else nacount--;
           }
        });
-       })(seeds[link], link); 
+       })(seeds[link], link,sss); 
    }  
   }
  });
@@ -873,23 +898,47 @@ for(var l in stemplates.keys()){
 
 consola.info("START SCHEDULE");
 
+(function(){
+  db.ref('/ethiopia/links/').once('value').then(function(snap){
+	  try{
+	  var links = Object.values(snap.val());
+	  console.log(snap.val()['-1425970700']);
+	  for(var l = 0; l < links.length; l++){
+	    if(getFileName(links[l]).replace(/\.|\//g,'')==='enagovet' && /http:\/\/www\./.test(links[l].slice(0,14))){ 
+	    	links[l] = links[l].replace(/http:\/\/www\./,'http://');
+	     
+	   }
+	   if(getFileName(links[l]).replace(/\.|\//g,'').startsWith('cap')){
+	   		consola.info(links[l]+" :"+links[l].length);
+	   }
+
+	  }
+	  console.log("TOTS LINKS"+links.length);
+	  firebaseCache.put('__-articles-__',links);
+	 }catch(e){
+	 	 firebaseCache.put('__-articles-__',[]); 
+	     consola.error('empty',e);
+	 }
+ });
+})();
+
 function start(){
 
-  db.ref('/ethiopia/links/').once('value').then(function(snap){
-  try{
-  var links = Object.values(snap.val());
-  for(var l = 0; l < links.length; l++){
-    if(getFileName(links[l]).replace(/\.|\//g,'')==='enagovet' && /http:\/\/www\./.test(links[l].slice(0,14))){ 
-    	links[l] = links[l].replace(/http:\/\/www\./,'http://');
-     //consola.info(links[l]);
-   }
-  }
-  firebaseCache.put('__-articles-__',links);
-  consola.info("TOTAL News", links.length);
-  //fs.writeFile('test.txt',links)
-  update();
- }catch(e){firebaseCache.put('__-articles-__',[]); consola.error('empty',e);update();}
-});
+ db.ref('/ethiopia/links/').once('value').then(function(snap){
+	  try{
+	  var links = Object.values(snap.val());
+	  for(var l = 0; l < links.length; l++){
+	    if(getFileName(links[l]).replace(/\.|\//g,'')==='enagovet' && /http:\/\/www\./.test(links[l].slice(0,14))){ 
+	    	links[l] = links[l].replace(/http:\/\/www\./,'http://');
+	     //consola.info(links[l]);
+	   }
+	  }
+	  firebaseCache.put('__-articles-__',links);
+	  consola.info("TOTAL News", links.length);
+	  //fs.writeFile('test.txt',links)
+	  update();
+	 }catch(e){firebaseCache.put('__-articles-__',[]); consola.error('empty',e);update();}
+ });
 }
 //from scratch
 var allh = [];
@@ -953,7 +1002,7 @@ function getCats(hash){
       if(!en) continue;
       for(var y=0; y<en.length; y++){
         try{
-         if(en[y].o.hash==hash && !cats.includes(CATEGORIES[l])) {cats.push(CATEGORIES[l]);
+         if(en[y].o.hash==hash && !cats.includes(CATEGORIES[l])+'_en') {cats.push(CATEGORIES[l]+'_en');
          break;}
        }catch(e){console.log(e);}
       }
@@ -961,7 +1010,7 @@ function getCats(hash){
 
       if(!amh) continue;
       for(var m=0; m<amh.length; m++){
-         if(amh[m].o.hash==hash && !cats.includes(CATEGORIES[l])) {cats.push(CATEGORIES[l]);
+         if(amh[m].o.hash==hash && !cats.includes(CATEGORIES[l])+'_am') {cats.push(CATEGORIES[l]+'_am');
          break;}
       }
       
@@ -1121,8 +1170,8 @@ function buildShort(){
 if(GAZETA.si)buildSearchI();
 if(GAZETA.index)
   startIndex();
-if(GAZETA.start)
-	start();
+//if(GAZETA.start)
+//	start();
 
 
 //db.ref('/ethiopia/').set({});
@@ -1148,4 +1197,33 @@ var server = app.listen(process.env.PORT || 8080, function () {
 
 
 
+function del(source){
+	console.log(source+":"+source.length);
+  db.ref('/ethiopia/newsL/').once('value').then (function(snapshot){
+  try{
+    var list = snapshot.val();
+      var i = 0;
+      for(var hash in list){
 
+      	if(list[hash].source === source){
+      		 var cats = getCats(hash);
+      		 for(var i=0; i<cats.length; i++){
+      		 
+      		 	var arr = cats[i].split('_');
+      		 	var lang = arr[1];
+      		 	var cat = arr[0];
+      		 	db.ref('ethiopia/'+lang+'/'+cat+'/'+hash).remove(); 
+      		 	
+      		 } 
+      		
+      		db.ref('ethiopia/newsL/'+hash).remove();
+      		db.ref('ethiopia/'+source+'/'+hash).remove();
+      		db.ref('ethiopia/links/'+hash).remove();
+      		
+      	}
+      }
+   }catch(e){
+    console.log(e);
+   }
+  });                   
+}

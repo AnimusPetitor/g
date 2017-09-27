@@ -162,7 +162,7 @@ function covet_webp(dat, response){
                     file.acl.add(options, function(err, aclObject) {
                         
                     });
-                   //pArt(dat.news, dat.cat); 
+                    //pArt(dat.news, dat.cat); 
                    db.ref('/ethiopia/newsL/'+Hash).set(dat.news);
                    consola.info("converted and saved thumb.",dat.news.thumbnail);
                    response(dat.news, dat.cat);
@@ -394,11 +394,14 @@ function fetch(template, link,source,response, body, cat,covet_web){
                         var ret = []
                         if(!video && !photo && !audio ){
                           var childs = container.childNodes;
-
+                           console.log(childs.length);
                           for(var l=0; l<childs.length; l++){
                              if(childs[l].nodeType===3) {
                               var text = childs[l].data.trim();
                               if (text.length > 0) {
+                               /// var lat = ret[ret.length-1];
+                                  //          if(!lat.startsWith("***") && lat.slice(lat.length-2)!==';% ') ret.push(text);
+                                    //        else ret[ret.length-1] += lat + text;
                                 ret.push(text);
                               }
                             }
@@ -409,26 +412,55 @@ function fetch(template, link,source,response, body, cat,covet_web){
                                   || childs[l].querySelector("em")
                                     || childs[l].querySelector("a")
                                     || childs[l].querySelector("strong")){
+                                
                                    walkBody(childs[l], function (node) {
                                       //console.log(node);
-                                      if (node.nodeType === 3 ) {
-                                      
+                                     if (node.nodeType === 3 ) {
+                                          var lat = ret[ret.length-1];
+                                         // if(lat && lat.slice(lat.length-3)===';% ') {
+                                           // if(node.previousSibling && node.previousSibling.nodeType==='A'){
+                                             // return;
+                                            //}
+                                          //}
                                           var text = node.data.replace(/[\n\u00A0]+/g,'').trim();
                                           if (text.length > 0) {
-                                            ret.push(text);
-                                          }
+                                            //if(lat.slice(lat.length-3)!==';% ') ret.push(text);
+                                            //else
+                                            
+                                            if(!ret[ret.length-1].startsWith("***")) ret[ret.length-1] += text + ' ';
+                                            else ret.push(text);
+                                       }
                                       }else if(node.nodeType === 1){
+                                        try{
+                                        var lat = ret[ret.length-1];  
                                         if(node.nodeName==="IMG"){
-                                         var src  = node.src;
-                                         if(src && src.startsWith('/')) src = 'http://'+getFileName(link)+src;
-                                         ret.push("***"+src);
-                                       }else if(node.nodeName==="em"){
-                                         ret.push("<<<"+node.innerText);   
-                                       }else if(node.nodeName==='a'){
-
-                                       }else if(node.nodeName==='strong'){
-                                          
-                                      }
+                                            var src  = node.src;
+                                           if(src && src.startsWith('/')) src = 'http://'+getFileName(link)+src;
+                                           ret.push("***"+src);
+                                        }else if(node.nodeName.startsWith("H") && node.nodeName.length===2){
+                                          ret.push("***"+node.textContent); 
+                                        }else if(node.nodeName==="EM"){
+                                         if(!lat.startsWith('***'))ret[ret.length-1] = ret[ret.length-1] + " %EM%"+node.textContent+"EM;% ";
+                                         else ret.push(" %EM%"+node.textContent+" EM;% ");   
+                                        }else if(node.nodeName==="B"){
+                                         //ret[ret.length-1] = ret[ret.length-1] + "%B%"+node.textContent+"B;%";   
+                                        }else if(node.nodeName==='A'){
+                                          if(!node.href) return;
+                                         
+                                          //var mark =  " %A%"+node.textContent.trim()+node.href +'A;% ';
+                                         //if(!lat.includes(mark))
+                                          if(!lat.startsWith('***'))ret[ret.length-1] = lat + " %A"+node.textContent.trim()+"%"+node.href +'A;% ';   
+                                          else ret.push(" %A"+node.textContent.trim()+"%"+node.href +'A;% ');  
+                                        }else if(node.nodeName==='STRONG'){
+                                          //ret[ret.length-1] = ret[ret.length-1] + ">>"+node.textContent+"/>";   
+                                        }else if(node.nodeName==='P'){
+                                          //ret.push();
+                                          ret.push('');
+                                          //ret[ret.length-1] = ret[ret.length-1] + ">>"+node.textContent+"/>";   
+                                        }else {
+                                          console.log(node.nodeName);
+                                        }
+                                       }catch(e){console.log(e);}
                                       }
                                   });  
                                 }
@@ -451,9 +483,10 @@ function fetch(template, link,source,response, body, cat,covet_web){
                           
                              
                            }
-                         //console.log('SS'+ret); 
-                         val = ret; 
+                        
                            }
+                           // console.log('SS'+ret); 
+                         val = ret; 
                         }
                         else {
                           //console.log(container);
@@ -567,7 +600,7 @@ function fetch(template, link,source,response, body, cat,covet_web){
                                 }
                               }
                               if(!hasVideo && !hasAudio && !hasPhoto && childs[l].textContent.trim().length>0){
-
+                                console.log(childs[l].innerHTML);  
                                 if(childs[l].querySelector("img") 
                                     || childs[l].querySelector("em")
                                     || childs[l].querySelector("a")
@@ -582,11 +615,14 @@ function fetch(template, link,source,response, body, cat,covet_web){
                                         if(node.nodeName==="IMG"){
                                          ret.push("***"+node.src);
                                         }else if(node.nodeName==="em"){
-                                         ret.push("<<<"+node.innerText);   
+                                         ret.push(">E>"+node.textContent+"/>");   
+                                        }else if(node.nodeName==="b"){
+                                         ret.push(">B>"+node.textContent+"/>");   
                                         }else if(node.nodeName==='a'){
-
+                                          console.log("LIIIINK"+node.textContent);  
+                                         ret.push("<<"+node.textContent+'/>'+node.href);     
                                         }else if(node.nodeName==='strong'){
-                                          
+                                          ret.push(">>"+node.textContent+"/>");   
                                         }
                                       } 
                                   });  
@@ -674,7 +710,7 @@ function pArt(news, categories){
       }   
     }catch(e){consola.error("csynop",e); }
   //db.ref('/ethiopia/').set({}); return;
-  if(Object.keys(news).length<=4 || !news.title || !(news.body || news.cover_audio)) {return; bot.sendMessage(381956489,news.title+news.link); }try{delete news.failcount;}catch(e){}
+  if(Object.keys(news).length<=4 || !news.title || !(news.body || news.cover_audio)) { bot.sendMessage(381956489,news.title+news.link);return; }try{delete news.failcount;}catch(e){}
    try{
       //var article = '<b>'+news.title+'</b>\n'+ (news.synop?'<pre>'+news.synop+'</pre>':  (news.body && news.body.length > 0  ? news.body[0]:''));
         //         article += '\n<a href="'+ news.link +'">Open in Browser</a>\nposted a new article!'; 
@@ -702,7 +738,9 @@ function pArt(news, categories){
     //news.lang =  'am';
     db.ref('/ethiopia/links/'+hash).set(link);
     db.ref('/ethiopia/newsL/'+hash).set(news);
-
+    db.ref('/ethiopia/source/'+source+'/'+hash).set(news.timestamp);
+    consola.info("SAVED",hash,news);
+    firebaseCache.get('__-articles-__').push(link);
     if(GAZETA.si || !GAZETA.force){
       var tbi = news;
      if(tbi.body){
@@ -710,13 +748,11 @@ function pArt(news, categories){
         tbi.hash = hash;
       }
       console.log('added to search'+hash);
-      store.push(news);  
+      store.push(tbi);  
     }
     //+link.replace(/\.|\//g,'').hashCode(
     //db.ref('/ethiopia/newsL/')).push(news); 
-    db.ref('/ethiopia/source/'+source+'/'+hash).set(news.timestamp);
-    consola.info("SAVED",hash,news);
-    firebaseCache.get('__-articles-__').push(link);
+   
    }catch(e){consola.error("error saving to db",e);}
    //batch indexing is faster, on hold
    //consola.info("updating cache and index");
@@ -746,14 +782,13 @@ function fetchArt(template, link, source, response, categories,post){
    }); 
 }
 
-function getNewLinks(linko, template,response, body,force){
+function getNewLinks(linko, template,response, body,force,news){
       const dom = new JSDOM(body);//{ runScripts: "dangerously" }
       try{
            //var secure = linko.startsWith("https");
            consola.info("checkin sseeds from",linko);
            var cln = template.split('sXs')[0];
            var index = firebaseCache.get('__-articles-__');
-
            var nlinks = [];
            var type2 = cln.startsWith('-');
            var clist = dom.window.document.body.querySelectorAll("[class^='"+cln+"']");
@@ -775,18 +810,25 @@ function getNewLinks(linko, template,response, body,force){
                  link = 'http://'+ getFileName(linko)+link.replace(/\/\//,''); 
                } 
               else if(link.startsWith('/')) link = 'http://'+getFileName(linko)+link;
-
-               if(!/^[\000-\177]*$/.test(link))
-              link = encodeURI(link);
+               var nIindex = index && !index.includes(link);
+               //already exists
+               //console.log(link+" :"+link.length);
+               //console.log('link dne exists'+ nIindex);
+               if(!/^[\000-\177]*$/.test(link)){
+                link = encodeURI(link);
+                if(nIindex) nIindex = index && !index.includes(link);
+                //console.log('encoded l exists '+nIindex);
+               }
               //console.log((index && !index.includes(link)) || GAZETA.force || force && !nlinks.includes(link));
-              if((index && !index.includes(link)) || GAZETA.force || force && !nlinks.includes(link)){
+             
+              if(nIindex || GAZETA.force || (force) && !nlinks.includes(link)){
                  consola.info("newfoundlink", link);
 
-                 if(!force){ 
+                 if(!force && !news){ 
                   nlinks.push(link);
                   //index.push(link);
 
-                 } else nlinks.push({link:link, title: l.textContent.trim().length>0 
+                 } else if(nIindex || force) nlinks.push({link:link, title: l.textContent.trim().length>0 
                         ? l.textContent.replace(/^[(\\n)\s]+|[(\\n)\s]+$|[^\w][\n]+[^\w]/g,''):
                         clist[v].getElementsByTagName('a')[1].textContent.replace(/^[(\\n)\s]+|[(\\n)\s]+$|[^\w][\n]+[^\w]/g,'')});
 
@@ -808,6 +850,8 @@ function getNewLinks(linko, template,response, body,force){
 module.exports.getNewArticle = function(article, response){  
     try{
       var link = article.link;
+      if(typeof link === 'object') link = link.link;
+      console.log(link);
       var hash = link.replace(/\.|\//g,'').hashCode(); 
       var source = getFileName(link).replace(/\.|\//g,'').trim(); 
       console.log(source);
@@ -826,26 +870,24 @@ module.exports.getNewArticle = function(article, response){
 //var seedList = ["http://www.fanabc.com/index.php/fana-radio.html"];
 module.exports.newSubseeds = function(seed, response){
    var link = seed.link;
-   //consola.info("GETTin",link);
-
-    //if(!seedList.includes(link)){return;response();}
-    if(!/^[\000-\177]*$/.test(link))
     link = encodeURI(link);
    var address = seed.address; 
    var options = {
       url:link,
       headers:{
         'User-Agent':'Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/_BuildID_) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36'
-      }
-   };
+     }
+    };
+
      request.get(link, function (error, respons, body) {
         //consola.info(body);
         if(error===null)
-            getNewLinks(link, address,response, body, seed.force);
+            getNewLinks(link, address,response, body, seed.force, seed.new);
         else {consola.error("error when getting subseeds ",error); response();}
 
     });
 }
+
 
 
 //object.keys
