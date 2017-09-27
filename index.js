@@ -836,7 +836,7 @@ function update(sss,force){
   var linksize = Object.keys(seeds).length;
   for(var link in seeds){  
    var sauce = getFileName(link.trim()).replace(/\.|\//g,''); 
-   if((link.length>0 && sss.length==0) || (link.length>0 && sss.length>0 && sss.includes(sauce)) ){
+   if((link.length>0 && !sss) || (link.length>0 && sss.length>0 && sss.includes(sauce)) ){
        (function(meta, link,sss){
        	var opts = {link:link,address:meta.address};
        	if(sss){
