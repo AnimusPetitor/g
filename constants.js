@@ -77,16 +77,16 @@ var cache = require('memory-cache');
 var key = require("./gazeta-1ca8d-firebase-adminsdk-ov8ih-6e7ef6e759.json");
 admin.initializeApp({
   credential: admin.credential.cert(key),  
-  databaseURL: "https://gazeta-1ca8d.firebaseio.com",
-  storageBucket: "gs://gazeta-1ca8d.appspot.com"
+  databaseURL: "https://gazeta-bb838.firebaseio.com",
+  storageBucket: "gs://gazeta-bb838.appspot.com"
 });
 global.db = admin.database();
 global.firebaseCache = new cache.Cache();
 global.gcs = require('@google-cloud/storage')({
-    projectId: 'gazeta-1ca8d',
+    projectId: 'gazeta-bb838',
     keyFilename: './gazeta-1ca8d-firebase-adminsdk-ov8ih-6e7ef6e759.json',
 });
-global.bucket = gcs.bucket('gazeta-1ca8d.appspot.com');
+global.bucket = gcs.bucket('gazeta-bb838.appspot.com');
 global.sharp = require('sharp');
 global.request = require('cloudscraper');
 

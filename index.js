@@ -171,15 +171,16 @@ bot.on('text', (msg) => {
           if(msg.text.trim().length==8){
            update([]);
           }else{
-          	var sources = msg.text.slice(8).split(/ +/);
+          	var sourcess = msg.text.slice(8).split(/ +/);
           	
-          	update(sources,sources[sources.length-1].length==2);
+          	update(sourcess,sourcess[sourcess.length-1].length==2);
           	console.log(msg.text.slice(9).split(/ +/) );
           }
         }
         else if(msg.text.startsWith('/c ')){
+
           if(!sourcArr){
-            sourcArr = Array.from(sources.keys());
+            sourcArr = sss;
           }
           var add = sseeds.get( sourcArr[parseInt(msg.text.slice(3)) - 1]  );
           var ret = '';
@@ -198,6 +199,7 @@ bot.on('text', (msg) => {
                ret += '\n';
             }
           }
+          console.log(ret);
           bot_users.set(msg.from.id+'c', ordersc); 
           bot.sendMessage(msg.chat.id,ret,{parseMode:'HTML'});   
        }else if(msg.text.toLowerCase().startsWith('/f ')){
