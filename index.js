@@ -163,7 +163,10 @@ bot.on('text', (msg) => {
           }catch(e){consola.info(e);}    ;
         });
     }else {
-    	if(msg.text.startsWith('/gdel ')){
+    	if(msg.text.startsWith('/ban ')){
+    		if(msg.text.length > 10) ban(msg.text.slice(5));		
+    	}
+    	else if(msg.text.startsWith('/gdel ')){
     	    del(msg.text.slice(6));		
     	}	
         else if(msg.text.startsWith('/gupdate')){
@@ -1189,6 +1192,10 @@ var server = app.listen(process.env.PORT || 8080, function () {
 
 
 
+function ban(link){
+	banlist.push(link);
+	db.ref('/ethiopia/bannedlink/'+link.hashCode()).set(link);
+ }
 
 function del(source){
 	console.log(source+":"+source.length);

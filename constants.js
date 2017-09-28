@@ -34,7 +34,9 @@ consola.cli();
 global.getFileName = function (str){
     var simplif = str.replace(/https?:\/\/(www.)?/g,'');
     return simplif.substring(0,simplif.indexOf('/'));
-} 
+}
+
+
 global.dtot = function (hash){
   var m,d,y,t1=hash.length>25,t2=hash.startsWith('ቀን') || hash.startsWith('Date'),t3 = hash.includes('/'); 
   if(t1)hash = hash.slice(hash.indexOf(",")+2);
@@ -93,3 +95,7 @@ global.bucket = gcs.bucket('gazeta-bb838.appspot.com');
 global.sharp = require('sharp');
 global.request = require('cloudscraper');
 
+global.banlist = [] ;
+db.ref('/ethiopia/bannedlink/').once('value').then (function(snapshot){
+  banlist = Object.keys(snapshot.values());
+});

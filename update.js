@@ -889,7 +889,7 @@ module.exports.getNewArticle = function(article, response){
         link = link.replace(/https?:\/\//,'http://www.');
       }
   
-      fetchArt(stemplates.get(source), link, source,response, article.cat,article.covet_webp);
+      if(!banlist.includes(link)) fetchArt(stemplates.get(source), link, source,response, article.cat,article.covet_webp);
     }catch(e){
       consola.info("template for source not active ",source);
       consola.error("article fetch error",e);
