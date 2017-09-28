@@ -724,30 +724,14 @@ function rcompare(a,b){
 	if(a[1]>b[1]) return -1;
 	return 0;
 }
-/*app.get('/getNews', (request, response) => { 
+app.get('/getNews', (request, response) => { 
    var link = request.query.q;
-      if(link===undefined) response.status(404).end();  
-      console.log(link);
-
-      var hash = hashCode(link.replace(/\.|\//g,''));
-       
-      var source = getFileName(link).replace(/\.|\//g,'');
-
+      if(!link) response.status(404).end();  
+   
       db.ref('/ethiopia/newsL/'+source+'/'+hash).once('value').then(function(snapshot) {
-         var n = snapshot.val(); 
-         if(n===null){
-            db.ref('/templates/'+source).once('value').then(function(snapshot) {
-                var temp = snapshot.val();
-                fetchArt(temp,link,source,response);  
-            });
-        }
-        else{ 
-            response.json({
-             id: n
-           });
-        }
+       
       });
-})*/
+})
 var total = 0;
 var links = '';
 var langcount = 0;
@@ -871,6 +855,7 @@ function update(sss,force){
                nacount--;
                consola.info(nacount);
                bot.sendMessage(381956489,'Remaining news: '+nacount); 
+               bot.sendMessage(392957340,'Remaining news:' +nacount);
                if(nacount===0){
                   //setTimeout(update, 100000);
                   setTimeout(function (){
@@ -1178,8 +1163,8 @@ function buildShort(){
 if(GAZETA.si)buildSearchI();
 if(GAZETA.index)
   startIndex();
-//if(GAZETA.start)
-//	start();
+if(GAZETA.start)
+	start();
 
 
 //db.ref('/ethiopia/').set({});

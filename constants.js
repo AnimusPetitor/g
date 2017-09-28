@@ -48,7 +48,7 @@ global.dtot = function (hash){
 var m_n  = {
     sep:9,
     oct:10, nov:11, dec:12, jan:1, feb:2, mar:3, apr:4
-    ,may:5, jun:6, jul:7, aug:8,'መስከ':9,'ነሃሴ':8 
+    ,may:5, jun:6, jul:7, aug:8,'መስከ':9,'ነሃሴ':8 ,'ጥቅም':10,'ህዳር':11,'ታህሳ':12,
 }
 function isNumeric(value){
   return !isNaN(value - parseFloat(value));
@@ -63,6 +63,9 @@ var approximate = function (ret){
        case 'ነሃሴ': ret[1] = 8; dadd = 6; break; 
        case 'መስከረም': ret[1] = 9; dadd = 10; break;
        case 'ጳጉሜ': ret[1] = 9; dadd = 5; break;
+       case 'ጥቅምት': ret[1] =10 ; dadd = 10; break;
+       case 'ታህሳስ': ret[1] = 12; dadd = 9; break;
+       case 'ህዳር': ret[1] = 11; dadd = 9; break;
      }
      ret[2] = parseInt(ret[2]) + (ret[1]>9 ? 7: 8);
      ret[0] = parseInt(ret[0]) + dadd;
