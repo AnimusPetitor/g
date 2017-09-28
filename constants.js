@@ -95,7 +95,7 @@ global.bucket = gcs.bucket('gazeta-bb838.appspot.com');
 global.sharp = require('sharp');
 global.request = require('cloudscraper');
 
-global.banlist = [] ;
+global.banlist = [];
 db.ref('/ethiopia/bannedlink/').once('value').then (function(snapshot){
-  banlist = Object.keys(snapshot.values());
+  banlist = Object.value(snapshot.val());
 });

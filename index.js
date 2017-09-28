@@ -1193,8 +1193,9 @@ var server = app.listen(process.env.PORT || 8080, function () {
 
 
 function ban(link){
-	banlist.push(link);
-	db.ref('/ethiopia/bannedlink/'+link.hashCode()).set(link);
+	banlist.push(link.trim());
+
+	db.ref('/ethiopia/bannedlink/'+link.trim().hashCode()).set(link);
  }
 
 function del(source){

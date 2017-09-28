@@ -888,8 +888,9 @@ module.exports.getNewArticle = function(article, response){
       if("enagovet"===source){
         link = link.replace(/https?:\/\//,'http://www.');
       }
-  
+      
       if(!banlist.includes(link)) fetchArt(stemplates.get(source), link, source,response, article.cat,article.covet_webp);
+      else response();
     }catch(e){
       consola.info("template for source not active ",source);
       consola.error("article fetch error",e);
