@@ -1159,7 +1159,7 @@ if(GAZETA.start)
   //console.log( "Listening on " + server_ip_address + ", port " + server_port )
 //});
 //process.env.PORT || 8080
-var server = app.listen(8080,'192.168.0.124', function () {
+var server = app.listen(process.env.PORT || 8080, function () {
     var port = server.address().port;
    console.log("App now running on port", port);
 });
