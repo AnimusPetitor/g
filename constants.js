@@ -36,6 +36,29 @@ global.getFileName = function (str){
     return simplif.substring(0,simplif.indexOf('/'));
 }
 
+global.getCats = function (hash){
+   var cats = [];
+   for(var l = 0; l < CATEGORIES.length; l++){
+     try{
+      var en = firebaseCache.get("catIndex").get(CATEGORIES[l]+'_en');
+      if(!en) continue;
+      for(var y=0; y<en.length; y++){
+        try{
+         if(en[y].o.hash==hash && !cats.includes(CATEGORIES[l])+'_en') {cats.push(CATEGORIES[l]+'_en');
+         break;}
+       }catch(e){console.log(e);}
+      }
+      var amh = firebaseCache.get("catIndex").get(CATEGORIES[l]+'_am');
+
+      if(!amh) continue;
+      for(var m=0; m<amh.length; m++){
+         if(amh[m].o.hash==hash && !cats.includes(CATEGORIES[l])+'_am') {cats.push(CATEGORIES[l]+'_am');
+         break;}
+      }
+     }catch(e){console.log(e);} 
+   }
+   return cats;
+}
 
 global.dtot = function (hash){
   var m,d,y,t1=hash.length>25,t2=hash.startsWith('ቀን') || hash.startsWith('Date'),t3 = hash.includes('/'); 
@@ -78,6 +101,8 @@ var approximate = function (ret){
    consola.info(ret);
    return new Date(ret[2], typeof ret[1] === 'string' ? parseInt(ret[1])-1: ret[1]-1 , parseInt(ret[0])+1).getTime();
 }
+global.CATEGORIES = ['Headlines', 'Entertainment', 'Social', 'World','Politics','Business', 'Art and Culture','Technology','Sport','Health','Audio','Video'];
+
 var cache = require('memory-cache');
 var key = require("./gazeta-1ca8d-firebase-adminsdk-ov8ih-6e7ef6e759.json");
 admin.initializeApp({
@@ -97,5 +122,5 @@ global.request = require('cloudscraper');
 
 global.banlist = [];
 db.ref('/ethiopia/bannedlink/').once('value').then (function(snapshot){
-  banlist = Object.value(snapshot.val());
+  banlist = Object.values(snapshot.val());
 });

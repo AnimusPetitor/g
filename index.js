@@ -42,15 +42,15 @@ const TeleBot = require('telebot');
 global.bot = new TeleBot('475582028:AAFljGnXcFBuyDCQop-mf8qqDVA9JtWA0NY');
 //409679078:AAGHzBfXrW8AEFnVe03MWXCPbyM7Q_1RhkU
 
+
 function scrapAndSend(link,bot,msg,put){
   var v = put == 2; 
-  console.log(v);
   console.log(link);
  scrapArticle(link, function reply(a){
     try{
-     
-       if(!v){
+       if(!v && bot){
         console.log(v);
+
         var article = '<b>'+a.title+'</b>\n'+ (a.synop?'<pre>'+a.synop+'</pre>':  (a.body && a.body.length > 0  ? a.body[0]:''));
         article += '\n<a href="'+ a.link +'">Open in Browser</a>'+(put==0?'<i>Successfully scrapped!</i>':'<i>Successfully updated!</i>') ; 
          bot.sendMessage(msg.chat.id,article,{parseMode:'HTML'});   
@@ -65,8 +65,9 @@ function scrapAndSend(link,bot,msg,put){
         } 
        }
 
+      scrapper.postArt(a,getCats(a.link));
    }catch(e){consola.info(e);}    
-  });
+  },v);
 }
 bot.on('start', (msg) => {
     bot.sendMessage(msg.from.id,'Welcome!\nAvailable commands\n/sources - available news sources\n/s - list subseeds from category link\n/v - view\n/p - add article\n/a - add article',{parseMode:'HTML'}); 
@@ -168,7 +169,9 @@ bot.on('text', (msg) => {
     	}
     	else if(msg.text.startsWith('/gdel ')){
     	    del(msg.text.slice(6));		
-    	}	
+    	}else if(msg.text.startsWith('/zup ')){
+    	   updateZombie(msg.text.slice(5));
+    	}
         else if(msg.text.startsWith('/gupdate')){
           console.log(msg.text.trim().length);	
           if(msg.text.trim().length==8){
@@ -307,7 +310,6 @@ var puss = require('wordpos');
 var pos = new puss();
 var sws = require('stopword').en;
 
-var CATEGORIES = ['Headlines', 'Entertainment', 'Social', 'World','Politics','Business', 'Art and Culture','Technology','Sport','Health','Audio','Video'];
 var hbac = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="en"> <!-- ---- Clean html template by http://WpFreeware.com ---- This is the main file (index.html). ---- You are allowed to change anything you like. Find out more Awesome Templates @ wpfreeware.com --> <head> <title></title> <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Font Awesome --> <link rel="stylesheet" href="css/font-awesome.min.css"> <link rel="stylesheet" href="font/font.css"> <link href="css/style.css" rel="stylesheet" media="screen"> <link href="css/responsive.css" rel="stylesheet" media="screen"><script async type="text/javascript" src="js/webpjs-0.0.2.min.js"></script></head> <body><div class="fix header_area"> <div class="fix wrap header"> <div class="logo floatleft"> <img src="images/logo.png"/> </div> <div class="manu floatright"> <img id src="images/play.png"/> <!--<ul id="nav-top"> <li><a href="index.html">Home</a></li> <li><a href="single.html">single</a></li> <li><a href="about.html">about</a></li> <li><a href="contact.html">contact</a></li> </ul>--> </div> </div> </div> <!--Clean template by WpFreeware.com--> <div class="fix content_area"> <div class="fix top_add_bar"> <div class="addbar_leaderborard"><img src="https://placehold.it/728x90"/></div> </div> <div class="manu_area"> <div class="mainmenu menu-wrap wrap"> <ul id="nav-bottom"> <li><a href="Headlines">Headlines</a></li> <li><a href="Entertainment">Entertainment</a></li><li><a href="Technology">Technology</a></li> <li><a href="Social">Society</a></li> <li><a href="Sport">Sport</a></li> <li><a href="Politics">Politics</a></li> <li><a href="Art and Culture">Art and Culture</a></li> <li><a href="Business">Business</a></li> <li><a href="World">World</a></li> <li><a href="Health">Health</a></li> <li><a href="Video">Video</a></li> <li><a href="Audio">Audio</a></li> </ul> </div> </div> <div class="fix wrap content_wrapper"> <div class="fix content"> <div class="fix main_content floatleft"> <div class="fix single_content_wrapper"> </div> <div class="pagination fix"> </div></div> <div class="fix sidebar floatright"> <div class="fix single_sidebar"> <h2>Search</h2> <form action="/search" method="get"><input name="q" class="search" type="text"  placeholder="Search ZGazeta"/></form></div> <div class="fix single_sidebar"> <div class="popular_post fix"> <h2>Popular</h2> </div> </div> <div class="fix single_sidebar"> <h2>Categories</h2> <a href="/c1">photography(5)</a> <a href="/c2">food(9)</a> <a href="/c3">Salads(4)</a> <a href="/c4">spicy(3)</a> <a href="/c5">Wine(5)</a> </div> </div> </div> </div> <div class="fix bottom_add_bar"> <div class="addbar_leaderborard"><img src="https://placehold.it/728x90"/></div> </div> </div> <!--Clean template by WpFreeware.com--> <div class="fix footer_area"> <div class="fix wrap footer"> <div class="fix copyright_text floatleft"></p> </div> <div class="fix social_area floatright"> <ul> <li><a href="" class="feed"></a></li> <li><a href="" class="facebook"></a></li> <li><a href="" class="twitter"></a></li> <li><a href="" class="drible"></a></li> <li><a href="" class="flickr"></a></li> <li><a href="" class="pin"></a></li> <li><a href="" class="tumblr"></a></li> </ul> </div> </div> </div> <script type="text/javascript" src="js/selectnav.min.js"></script> <script type="text/javascript"> selectnav("nav", { label: "-Navigation-", nested: true, indent: "-" }); </script> <script src="http://code.jquery.com/jquery.js"></script> <!-- This Template is designed by WpFreeware.com Team, You are allowed to change anything you like. Find out More Awesome template at http://www.WpFreeware.com. --> </body> </html>';
 var hometemplate = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="en"> <!-- ---- Clean html template by http://WpFreeware.com ---- This is the main file (index.html). ---- You are allowed to change anything you like. Find out more Awesome Templates @ wpfreeware.com --> <head> <title></title> <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Font Awesome --> <link rel="stylesheet" href="css/font-awesome.min.css"> <link rel="stylesheet" href="font/font.css"> <link href="css/style.css" rel="stylesheet" media="screen"> <link href="css/responsive.css" rel="stylesheet" media="screen"> <script async type="text/javascript" src="js/webpjs-0.0.2.min.js"></script> </head> <body> <div class="fix header_area"> <div class="fix wrap header"> <div class="logo floatleft"> <img src="images/logo.png" /> </div> <div class="floatright langc"><a href="am">Amharic</a>&nbsp;&nbsp;<a href="en">English</a></div> <div class="manu floatright"> <img id src="images/play.png" /> <!--<ul id="nav-top"> <li><a href="index.html">Home</a></li> <li><a href="single.html">single</a></li> <li><a href="about.html">about</a></li> <li><a href="contact.html">contact</a></li> </ul>--> </div> </div> </div> <!--Clean template by WpFreeware.com--> <div class="fix content_area"> <div class="fix top_add_bar"> <div class="addbar_leaderborard"><img src="https://placehold.it/728x90" /></div> </div> <div class="manu_area"> <div class="mainmenu menu-wrap wrap"> <ul id="nav-bottom"> <li><a href="Headlines">Headlines</a></li> <li><a href="Entertainment">Entertainment</a></li> <li><a href="Technology">Technology</a></li> <li><a href="Social">Society</a></li> <li><a href="Sport">Sport</a></li> <li><a href="Politics">Politics</a></li> <li><a href="Art and Culture">Art and Culture</a></li> <li><a href="Business">Business</a></li> <li><a href="World">World</a></li> <li><a href="Health">Health</a></li> <li><a href="Video">Video</a></li> <li><a href="Audio">Audio</a></li> </ul> </div> </div> <div class="fix wrap content_wrapper"> <div class="fix content"> <div class="fix main_content floatleft"> <div class="fix single_content_wrapper"> </div> <div class="pagination fix"> </div> </div> <div class="fix sidebar floatright"> <div class="fix single_sidebar"> <h2>Search</h2> <form action="/search" method="get"><input name="q" class="search" type="text" placeholder="Search ZGazeta" /></form> </div> <div class="fix single_sidebar"> <div class="popular_post fix"> <h2>Popular</h2> </div> </div> <div class="fix single_sidebar"> <h2>Categories</h2> <a href="/c1">photography(5)</a> <a href="/c2">food(9)</a> <a href="/c3">Salads(4)</a> <a href="/c4">spicy(3)</a> <a href="/c5">Wine(5)</a> </div> </div> </div> </div> <div class="fix bottom_add_bar"> <div class="addbar_leaderborard"><img src="https://placehold.it/728x90" /></div> </div> </div> <!--Clean template by WpFreeware.com--> <div class="fix footer_area"> <div class="fix wrap footer"> <div class="fix copyright_text floatleft"> </p> </div> <div class="fix social_area floatright"> /*<ul> <li><a href="" class="feed"></a></li> <li><a href="" class="facebook"></a></li> <li><a href="" class="twitter"></a></li> <li><a href="" class="drible"></a></li> <li><a href="" class="flickr"></a></li> <li><a href="" class="pin"></a></li> <li><a href="" class="tumblr"></a></li> </ul>*/ </div> </div> </div> <script type="text/javascript" src="js/selectnav.min.js"></script> <script type="text/javascript"> selectnav("nav", { label: "-Navigation-", nested: true, indent: "-" }); </script> </body> </html>';
 var articletemplate = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="en"> <!-- ---- Clean html template by http://WpFreeware.com ---- This is the main file (index.html). ---- You are allowed to change anything you like. Find out more Awesome Templates @ wpfreeware.com --> <head> <title>Welcome to my site</title> <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Font Awesome --> <link rel="stylesheet" href="css/font-awesome.min.css"> <link rel="stylesheet" href="font/font.css"> <link href="css/style.css" rel="stylesheet" media="screen"> <link href="css/responsive.css" rel="stylesheet" media="screen"> </head> <body> <div class="fix header_area"> <div class="fix wrap header"> <div class="logo floatleft"> <img src="images/logo.png"/> </div> <div class="manu floatright"> <img id src="images/play.png"/> <!--<ul id="nav-top"> <li><a href="index.html">Home</a></li> <li><a href="single.html">single</a></li> <li><a href="about.html">about</a></li> <li><a href="contact.html">contact</a></li> </ul>--> </div> </div> </div> <div class="fix content_area"> <div class="fix top_add_bar"> <div style="width:700px;margin:0 auto;"><img src="https://placehold.it/700x90"/></div> </div> <div class="manu_area"> <div class="mainmenu wrap"> <ul id="nav-bottom"> <li><a href="Headlines">Headlines</a></li> <li><a href="Entertainment">Entertainment</a></li> <li><a href="Technology">Technology</a></li> <li><a href="Society">Society</a></li> <li><a href="Sport">Sport</a></li> <li><a href="Politics">Politics</a></li> <li><a href="Art and Culture">Art and Culture</a></li> <li><a href="Business">Business</a></li> <li><a href="World">World</a></li> <li><a href="Health">Health</a></li> <li><a href="Video">Video</a></li> <li><a href="Audio">Audio</a></li> </ul> </div> </div> <div class="fix wrap content_wrapper"> <div class="fix content"> <div class="fix main_content floatleft"> <div class="single_page_content fix"> <div class="related_post fix"> <h2>Related Post</h2> <div class="fix related_post_container"> <div class="fix single_related_post floatleft"> <img src="images/related_feature_img.png"/> <h2>Dapibus Elit Amet Parturient</h2> <p>28 Sep, 2012 | 14 Comments</p> </div> <div class="fix single_related_post floatleft"> <img src="images/related_feature_img.png"/> <h2>Dapibus Elit Amet Parturient</h2> <p>28 Sep, 2012 | 14 Comments</p> </div> <div class="fix single_related_post floatleft"> <img src="images/related_feature_img.png"/> <h2>Dapibus Elit Amet Parturient</h2> <p>28 Sep, 2012 | 14 Comments</p> </div> </div> </div> </div> </div> <div class="fix sidebar floatright"> <div class="fix single_sidebar"><div class="fix single_sidebar"> <h2>Search</h2><form action="/search" method="get"><input name="q" class="search" type="text"  placeholder="Search ZGazeta"/></form></div><div class="popular_post fix"> <h2>Popular</h2> <div class="fix single_popular"> <img src="images/popular.png" class="floatleft"/> <h2>Vestibum Malesuada Etiam Magna</h2> <p>12 Nov, 2012</p> </div> <div class="fix single_popular"> <img src="images/popular.png" class="floatleft"/> <h2>Vestibum Malesuada Etiam Magna</h2> <p>12 Nov, 2012</p> </div> <div class="fix single_popular"> <img src="images/popular.png" class="floatleft"/> <h2>Vestibum Malesuada Etiam Magna</h2> <p>12 Nov, 2012</p> </div> </div> </div><div class="fix single_sidebar"> <h2>Categories</h2> <a href="">photography(5)</a> <a href="">food(9)</a> <a href="">Salads(4)</a> <a href="">spicy(3)</a> <a href="">Wine(5)</a> </div> </div> </div> <div class="fix bottom_add_bar"> <div style="width:700px;margin:0 auto;"><img src="http://placehold.it/700x90"/></div> </div> </div> </div> <div class="fix footer_area"> <div class="fix wrap footer"> <div class="fix copyright_text floatleft"> <p>Designed By <a href="http://www.wpfreeware.com" rel="nofollow">WpFreeware</a></p> </div> <div class="fix social_area floatright"> <ul> <li><a href="" class="feed"></a></li> <li><a href="" class="facebook"></a></li> <li><a href="" class="twitter"></a></li> <li><a href="" class="drible"></a></li> <li><a href="" class="flickr"></a></li> <li><a href="" class="pin"></a></li> <li><a href="" class="tumblr"></a></li> </ul> </div> </div> </div> <script type="text/javascript" src="js/selectnav.min.js"></script> <script type="text/javascript"> selectnav("nav", { label: "-Navigation-", nested: true, indent: "-" }); </script> <script src="http://code.jquery.com/jquery.js"></script> <!-- This Template is designed by WpFreeware.com Team, You are allowed to change anything you like. Find out More Awesome template at http://www.WpFreeware.com. --> </body> </html>';
@@ -611,9 +613,9 @@ app.get('/sseeds',(req, response)=>{
      response.status(404).send("Error Occured");
    } 
 });
-function scrapArticle(link, response){
+function scrapArticle(link, response,webp){
    var source = getFileName(link).replace(/\.|\//g,'');  
-   scrapper.getNewArticle({link:link},function (news){
+   scrapper.getNewArticle({link:link,covet_webp:webp},function (news){
       response(news);
    }); 
 }
@@ -709,9 +711,10 @@ app.get('/:hash',(req, response)=>{
        
        if(!firebaseCache.get("catIndex"))response.send('not indexed yet');
          try{   
-             req.query.size = firebaseCache.get("catIndex").get("Headlines_am").length + firebaseCache.get("catIndex").get("Headlines_en").length ;     
-             getByCategory({lang:'both', resp:response,categ:req.params.hash, psize:Math.floor(req.query.size/12), page:req.query.page===undefined ? 0: req.query.page});
-         }catch(e){console.log(e);response.send('indexing');}
+         		//next();
+             //req.query.size = firebaseCache.get("catIndex").get("Headlines_am").length + firebaseCache.get("catIndex").get("Headlines_en").length ;     
+             //getByCategory({lang:'both', resp:response,categ:req.params.hash, psize:Math.floor(req.query.size/12), page:req.query.page===undefined ? 0: req.query.page});
+         }catch(e){console.log(e);response.send('indexing'); }
       //});
     }
 });
@@ -727,12 +730,11 @@ function rcompare(a,b){
 	if(a[1]>b[1]) return -1;
 	return 0;
 }
-app.get('/getNews', (request, response) => { 
+app.get('/s/getNews', (request, response) => { 
    var link = request.query.q;
       if(!link) response.status(404).end();  
-   
-      db.ref('/ethiopia/newsL/'+source+'/'+hash).once('value').then(function(snapshot) {
-       
+      db.ref('/ethiopia/newsL/'+link).once('value').then(function(snapshot) {
+       	response.send(snapshot.val());
       });
 })
 var total = 0;
@@ -990,32 +992,6 @@ function searchbyid(inp,c,e){
  }catch(e){console.log(e);}
 }
 
-function getCats(hash){
-   var cats = [];
-   for(var l = 0; l < CATEGORIES.length; l++){
-     try{
-      var en = firebaseCache.get("catIndex").get(CATEGORIES[l]+'_en');
-      if(!en) continue;
-      for(var y=0; y<en.length; y++){
-        try{
-         if(en[y].o.hash==hash && !cats.includes(CATEGORIES[l])+'_en') {cats.push(CATEGORIES[l]+'_en');
-         break;}
-       }catch(e){console.log(e);}
-      }
-      var amh = firebaseCache.get("catIndex").get(CATEGORIES[l]+'_am');
-
-      if(!amh) continue;
-      for(var m=0; m<amh.length; m++){
-         if(amh[m].o.hash==hash && !cats.includes(CATEGORIES[l])+'_am') {cats.push(CATEGORIES[l]+'_am');
-         break;}
-      }
-      
-      
-     }catch(e){console.log(e);} 
-   }
-   console.log(cats);
-   return cats;
-}
 
 /*function buildQuery(n){
   var  qu = n.title.toLowerCase().split(/ +/);
@@ -1182,8 +1158,8 @@ if(GAZETA.start)
 //server.listen(server_port, server_ip_address, function () {
   //console.log( "Listening on " + server_ip_address + ", port " + server_port )
 //});
-
-var server = app.listen(process.env.PORT || 8080, function () {
+//process.env.PORT || 8080
+var server = app.listen(8080,'192.168.0.124', function () {
     var port = server.address().port;
    console.log("App now running on port", port);
 });
@@ -1197,6 +1173,25 @@ function ban(link){
 
 	db.ref('/ethiopia/bannedlink/'+link.trim().hashCode()).set(link);
  }
+
+function updateZombie(source){
+ db.ref('/ethiopia/source/'+source).once('value').then (function(snapshot){
+  try{
+    var list = snapshot.val();
+      for(var hash in list){
+      	(function (hash){
+      		db.ref('/ethiopia/links/'+hash).once('value').then (function(snapshot){
+      			//console.log(snapshot.val());
+      			scrapAndSend(snapshot.val(),null,null, 2);		
+            });  
+      	})(hash)
+      	
+      }
+   }catch(e){
+    console.log(e);
+   }
+  });                  
+}
 
 function del(source){
 	console.log(source+":"+source.length);
