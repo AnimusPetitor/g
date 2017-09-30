@@ -162,7 +162,7 @@ function covet_webp(dat, response){
                 response(dat.news, dat.cat);
               });   
               stream1.on('finish', function () { 
-                   dat.news.thumbnail =  "https://www.googleapis.com/storage/v1/b/gazeta-1ca8d.appspot.com/o/"+dat.cover_image+dat.hash+'thumb.webp?alt=media';
+                   dat.news.thumbnail =  "https://www.googleapis.com/storage/v1/b/gazeta-bb838.appspot.com/o/"+dat.cover_image+dat.hash+'thumb.webp?alt=media';
                    var file = bucket.file(dat.cover_image+dat.hash+'thumb.webp');
                    var options = {
                       entity: 'allUsers',
@@ -182,7 +182,7 @@ function covet_webp(dat, response){
                  response(dat.news,dat.cat);
               });
 
-              dat.news[dat.cover_image] = "https://www.googleapis.com/storage/v1/b/gazeta-1ca8d.appspot.com/o/"+dat.cover_image+dat.hash+'.webp?alt=media';
+              dat.news[dat.cover_image] = "https://www.googleapis.com/storage/v1/b/gazeta-bb838.appspot.com/o/"+dat.cover_image+dat.hash+'.webp?alt=media';
               var fil = bucket.file(dat.cover_image+dat.hash+'.webp');
               var options = {
                 entity: 'allUsers',
@@ -191,6 +191,7 @@ function covet_webp(dat, response){
               fil.acl.add(options, function(err, aclObject) {});
               readwebp.pipe(thumbnlner).pipe(stream1);
               pArt(dat.news,dat.cat)
+              //db.ref('/ethiopia/newsL/'+dat.hash+'/cover_image').set(dat.news.cover_image);
               consola.info("converted and saved cover_image",dat.news[dat.cover_image]);                                     
           } 
     });
@@ -201,7 +202,7 @@ function covet_webp(dat, response){
       response(dat.news, dat.cat);
     });
    // 
-
+  console.log('s'+dat.val);
    request.request({method: 'GET',url:dat.val,encoding: null},function(err, respons, body) {
       //consola.info("downloaded image. Converting to webp", val); 
       if(!err){
@@ -214,12 +215,12 @@ function covet_webp(dat, response){
       }
      else {
       //PERSIST THESE FAILS AND RETRY ON NEXT SCHEDULE
-      consola.info("could not retrieve image retrying",err.message); 
+      consola.info("could not retrieve image retrying",err); 
       request.get(dat.val,function(err, respons, body) {
 
         if(!err){
         consola.info("downloaded image. Converting to webp", dat.val); 
-         console.log(typeof body + "L" + body); 
+         //console.log(typeof body + "L" + body); 
          sharp(body).webp().on('error',function(err) {
                                 consola.info('Error converting to webp',dat.val);
                                  bot.sendMessage(381956489,'2 '+dat.news.link);  
@@ -227,7 +228,7 @@ function covet_webp(dat, response){
                                 response(dat.news,dat.cat);
                               }).pipe(stream);
         }
-       else {consola.info("could not retrieve image ",err.message); bot.sendMessage(381956489,'1 '+dat.news.link); response(dat.news, dat.cat);}
+       else {consola.info("could not retrieve image ",err); bot.sendMessage(381956489,'1 '+dat.news.link); response(dat.news, dat.cat);}
      });
     }
    });
@@ -319,7 +320,6 @@ function fetch(template, link,source,response, body, cat,covet_web){
                             consola.info(item); 
                           }
                         }           
-
                        }
 
                        if(type1==='audio'){
@@ -340,8 +340,8 @@ function fetch(template, link,source,response, body, cat,covet_web){
                              news.o_cover_a_prev = AprevImage;
                              if(covet_web)
                              try{
-                                hasIm = true; 
-                                covet_webp({val:AprevImage, news:news,cat:cat, cover_image:'cover_a_prev'},response);
+                                //hasIm = true; 
+                               //covet_webp({val:AprevImage, news:news,cat:cat, cover_image:'cover_image'},response);
                              }catch(e){consola.error("webp",e);hasIm = false;}
 
                            }
@@ -351,8 +351,27 @@ function fetch(template, link,source,response, body, cat,covet_web){
                          //COVER PREVIEWS
                        } 
                        if(type1==='video') {
-                         val = getContent(container, "video");                
-                                }  
+                         val = getContent(container, "video");  
+                          if(val){
+                            var  AprevImage,preview_cln,preview = template['_cover_video_preview'];
+          
+                            if(preview)preview_cln =  preview.slice(preview.indexOf('xxx')+3,preview.indexOf('vvv'));
+                            if(preview_cln){
+                               var apreviews = container.getElementsByClassName(preview_cln);
+                               
+                               AprevImage = getContent(apreviews[0], "image");
+
+                               consola.info('Preview Image', AprevImage);
+                               var AudPValid = AprevImage && AprevImage.trim().length>0;
+                               if(AudPValid && AprevImage.startsWith('/'))AprevImage = 'http://'+getFileName(link)+AprevImage;
+                               if(AudPValid){
+                                 news.o_cover__prev = AprevImage;
+                              
+
+                               }
+                             }
+                          }              
+                        }  
                        else if(type1==='caption'){
                           try{  
                             console.log(item); 
@@ -803,6 +822,63 @@ function fetch(template, link,source,response, body, cat,covet_web){
        }catch(e){consola.error("ERROR",e);  }
 }
 
+module.exports.reconvert_webp = function(){
+  var v = 0;
+  var fs = require('fs');
+    var obj = JSON.parse(fs.readFileSync('sd.json', 'utf8'));
+    obj = obj.ethiopia.newsL;
+    for(var n in obj){
+      try{
+      var cover_image = obj[n].cover_image;
+      if(cover_image){
+        if(cover_image.includes('gazeta-1ca8d')){ //||){
+            /*var cats = getCats(n);
+           for(var i=0; i<cats.length; i++){
+           
+            var arr = cats[i].split('_');
+            var lang = arr[1];
+            var cat = arr[0];
+            db.ref('ethiopia/'+lang+'/'+cat+'/'+n).remove(); 
+            
+           } 
+          console.log(hash);
+          
+          db.ref('ethiopia/'+source+'/'+n).remove();
+          */
+           //db.ref('ethiopia/newsL/'+n+'/cover_image').remove();
+           console.log(n);
+         
+           //obj[n].cover_image = null;
+           //if(obj[n].cover_a_prev){
+             // obj[n].cover_a_prev =null;
+           //}      
+           //if(obj[n].cover_video){
+
+           //}
+           console.log(obj[n].original_image);
+           
+           //covet_webp({val:obj[n].original_image, news:obj[n], hash:n,cat:getCats(n),cover_image:'cover_image'},function(ne){
+             //if(ne.cover_image){
+
+             //}   
+           //});
+        }
+
+       }
+       var thum = obj[n].thumbnail && obj[n].thumbnail.includes('gazeta-1ca8d');
+        if(thum){
+         //db.ref('ethiopia/newsL/'+n+'/thumbnail').remove();
+        } 
+        if(thum || cover_image) {
+            db.ref('ethiopia/links/'+n).remove();
+          }
+
+      }catch(e){console.log(e);}
+   }
+   console.log(v);
+}
+
+
 
 module.exports.postArt = function(news, categories){
 
@@ -844,7 +920,7 @@ function pArt(news, categories){
    var hash = link.replace(/\.|\//g,'').hashCode();
    var vidc = categories.indexOf('Video_am') || categories.indexOf('Video_en');
    if(vidc!=-1){
-       db.ref('/ethiopia/'+categories[vidc].slice(categories[vidc].indexOf('_')+1)+'/Video/'+hash).set(news.timestamp);
+       db.ref('/ethiopia/'+categories[vidc].slice(categories[vidc].indexOf('_')+1)+'/Headlines/'+hash).set(news.timestamp);
    }
    for(var k=0; k<categories.length; k++){ 
         consola.info(categories[k]);
@@ -864,6 +940,7 @@ function pArt(news, categories){
     db.ref('/ethiopia/links/'+hash).set(link);
     db.ref('/ethiopia/newsL/'+hash).set(news);
     db.ref('/ethiopia/source/'+source+'/'+hash).set(news.timestamp);
+
     consola.info("SAVED",hash,news);
     firebaseCache.get('__-articles-__').push(link);
     if(GAZETA.si || !GAZETA.force){
@@ -877,7 +954,9 @@ function pArt(news, categories){
     }
     //+link.replace(/\.|\//g,'').hashCode(
     //db.ref('/ethiopia/newsL/')).push(news); 
-   
+     if(news.cover_image && news.cover_image.indexOf('.webp?')==-1 ){
+        db.ref('/ethiopia/webp/'+hash).set(news.cover_image); 
+     }
    }catch(e){consola.error("error saving to db",e);}
    //batch indexing is faster, on hold
    //consola.info("updating cache and index");

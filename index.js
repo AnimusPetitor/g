@@ -928,8 +928,9 @@ function updateLinks(update,list,size){
 }
 updateLinks();
 
-function start(){
 
+
+function start(){
  db.ref('/ethiopia/links/').once('value').then(function(snap){
 	  try{
 	  var links = Object.values(snap.val());
@@ -947,7 +948,7 @@ function start(){
  });
 }
 //from scratch
-var allh = [];
+global.allh = [];
 function buildSearchI(){	
  db.ref('/ethiopia/newsL/').once('value').then (function(snapshot){
   try{
@@ -971,6 +972,7 @@ function buildSearchI(){
      store.push(null);  
      store.pipe(Searchindex.defaultPipeline()).pipe(Searchindex.add());
     }   
+
     console.log("SIZZLE"+allh.length);
     //startIndex();
    }catch(e){
@@ -1227,3 +1229,5 @@ function del(source){
    }
   });                   
 }
+
+ //scrapper.reconvert_webp();
