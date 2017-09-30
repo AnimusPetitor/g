@@ -174,12 +174,13 @@ bot.on('text', (msg) => {
     	}
         else if(msg.text.startsWith('/gupdate')){
           console.log(msg.text.trim().length);	
+          //update links
           if(msg.text.trim().length==8){
-           update([]);
+           updateLinks(true,[]);
           }else{
           	var sourcess = msg.text.slice(8).split(/ +/);
           	
-          	update(sourcess,sourcess[sourcess.length-1].length==2);
+          	updateLinks(true,sourcess,sourcess[sourcess.length-1].length==2);
           	console.log(msg.text.slice(9).split(/ +/) );
           }
         }
@@ -897,7 +898,8 @@ for(var l in stemplates.keys()){
 
 consola.info("START SCHEDULE");
 
-(function(){
+function updateLinks(update,list,size){
+(function(update){
   db.ref('/ethiopia/links/').once('value').then(function(snap){
 	  try{
 	  var links = Object.values(snap.val());
@@ -918,8 +920,12 @@ consola.info("START SCHEDULE");
 	 	 firebaseCache.put('__-articles-__',[]); 
 	     consola.error('empty',e);
 	 }
+	 if(update){
+	 	update(list,size)
+	 }
  });
-})();
+})(update);
+}
 
 function start(){
 

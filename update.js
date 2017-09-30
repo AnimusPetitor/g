@@ -842,6 +842,10 @@ function pArt(news, categories){
    var source = news.source; 
    var cats = [];
    var hash = link.replace(/\.|\//g,'').hashCode();
+   var vidc = categories.indexOf('Video_am') || categories.indexOf('Video_en');
+   if(vidc!=-1){
+       db.ref('/ethiopia/'+categories[vidc].slice(categories[vidc].indexOf('_')+1)+'/Video/'+hash).set(news.timestamp);
+   }
    for(var k=0; k<categories.length; k++){ 
         consola.info(categories[k]);
         var cat = categories[k];
@@ -851,6 +855,7 @@ function pArt(news, categories){
           //both += 'm';  
         //}
         var cate = cat.substring(0,mid);
+
         //cats.push(cate);
         db.ref('/ethiopia/'+lang+'/'+cate+'/'+hash).set(news.timestamp);
     }
@@ -944,13 +949,13 @@ function getNewLinks(linko, template,response, body,force,news){
                }
               //console.log((index && !index.includes(link)) || GAZETA.force || force && !nlinks.includes(link));
               if(nIindex || GAZETA.force || (force) && !nlinks.includes(link)){
-                 if(link==='javascript:void(0);')continue;
+                 if(link==='javascript:void(0);') continue;
                  consola.info("newfoundlink", link);
                  if(!force && !news){ 
                   nlinks.push(link);
                   //index.push(link);
 
-                 } else if(nIindex || force) nlinks.push({link:link, title: l.textContent.trim().length>0 
+                 } else if(nIindex || force || GAZETA.force) nlinks.push({link:link, title: l.textContent.trim().length>0 
                         ? l.textContent.replace(/^[(\\n)\s]+|[(\\n)\s]+$|[^\w][\n]+[^\w]/g,''):
                         clist[v].getElementsByTagName('a')[1].textContent.replace(/^[(\\n)\s]+|[(\\n)\s]+$|[^\w][\n]+[^\w]/g,'')});
 
