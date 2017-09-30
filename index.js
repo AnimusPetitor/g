@@ -926,6 +926,7 @@ function updateLinks(update,list,size){
  });
 })(update);
 }
+updateLinks();
 
 function start(){
 
