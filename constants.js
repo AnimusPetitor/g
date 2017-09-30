@@ -7,7 +7,7 @@ global.GAZETA = {
       updateD:4800000,
       force:false,
       index:true,
-      start:false,
+      start:true,
       si:false
 };
  //separator: /[' ፡፥«»፣።\.,\W”\(\)“]]+/,

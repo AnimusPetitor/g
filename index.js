@@ -863,7 +863,7 @@ function update(sss,force,categs){
                bot.sendMessage(381956489,'Remaining news: '+nacount); 
                bot.sendMessage(392957340,'Remaining news:' +nacount);
                if(nacount===0){
-                  //setTimeout(update, 100000);
+                  setTimeout(update, 2700000);
                   setTimeout(function (){
                   	 try{
                   	  store.push(null);  
@@ -1144,8 +1144,8 @@ if(GAZETA.si)buildSearchI();
 if(GAZETA.index)
   startIndex();
 if(GAZETA.start)
-	start();
-
+	//start();
+	update([]);
 
 //db.ref('/ethiopia/').set({});
 //update();//, 180000);
