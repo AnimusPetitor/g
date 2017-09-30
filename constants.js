@@ -124,3 +124,8 @@ global.banlist = [];
 db.ref('/ethiopia/bannedlink/').once('value').then (function(snapshot){
   banlist = Object.values(snapshot.val());
 });
+global.ban = function(link){
+  banlist.push(link.trim());
+
+  db.ref('/ethiopia/bannedlink/'+link.trim().hashCode()).set(link);
+ }
