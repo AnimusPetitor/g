@@ -171,8 +171,8 @@ function covet_webp(dat, response){
                     file.acl.add(options, function(err, aclObject) {
                         
                     });
-                    //pArt(dat.news, dat.cat); 
-                   db.ref('/ethiopia/newsL/'+Hash).set(dat.news);
+                   pArt(dat.news, dat.cat); 
+                   //db.ref('/ethiopia/newsL/'+Hash).set(dat.news);
                    consola.info("converted and saved thumb.",dat.news.thumbnail);
                    response(dat.news, dat.cat);
               });
