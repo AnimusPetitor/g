@@ -906,7 +906,14 @@ function pArt(news, categories){
     }catch(e){consola.error("csynop",e); }
   //db.ref('/ethiopia/').set({}); return;
   //|| !(news.body || news.cover_audio)
-  if(Object.keys(news).length<=4 || !news.title) { ban(news.link); bot.sendMessage(381956489,news.title+news.link);return; }try{delete news.failcount;}catch(e){}
+
+  if(Object.keys(news).length<=4 || !news.title) { 
+
+    ban(news.link);
+     bot.sendMessage(381956489,news.title+news.link);return; }try{
+      delete news.failcount;
+
+    }catch(e){}
    try{
       //var article = '<b>'+news.title+'</b>\n'+ (news.synop?'<pre>'+news.synop+'</pre>':  (news.body && news.body.length > 0  ? news.body[0]:''));
         //         article += '\n<a href="'+ news.link +'">Open in Browser</a>\nposted a new article!'; 
@@ -918,6 +925,9 @@ function pArt(news, categories){
    var source = news.source; 
    var cats = [];
    var hash = link.replace(/\.|\//g,'').hashCode();
+   if(news.title.includes('Internal Error')){
+         db.ref('/ethiopia/again/'+hash).set(news.link);
+      }
    var vidc = categories.indexOf('Video_am') || categories.indexOf('Video_en');
    if(vidc!=-1){
        db.ref('/ethiopia/'+categories[vidc].slice(categories[vidc].indexOf('_')+1)+'/Headlines/'+hash).set(news.timestamp);

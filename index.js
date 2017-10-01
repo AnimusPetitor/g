@@ -139,7 +139,15 @@ bot.on('text', (msg) => {
             link = bot_users.get(msg.from.id)[parseInt(link)-1];
            }
         }
-        if(s) scrapAndSend(link, bot, msg, 2);
+        if(s){
+        	var sdfs = link.split(' ');
+        	if(link.split(' ').length>1){
+        		for(var mm=0; mm<sdfs.length; mm++){
+        			 scrapAndSend(sdfs[mm], bot, msg, 2);
+        		}
+        	}
+         else scrapAndSend(link, bot, msg, 2);
+     }
         else getArticle(link, function reply(a){
           try{
              if(a){     
@@ -864,11 +872,12 @@ function update(sss,force,categs){
                bot.sendMessage(381956489,'Remaining news: '+nacount); 
                bot.sendMessage(392957340,'Remaining news:' +nacount);
                if(nacount===0){
-                  setTimeout(update, 2700000);
+                  setTimeout(update, 7200000);
                   setTimeout(function (){
                   	 try{
                   	  store.push(null);  
     				  store.pipe(Searchindex.defaultPipeline()).pipe(Searchindex.add()); 
+    				  store = new Readable( {objectMode: true} );
                   	  consola.info("UPDATE DONE!");
                   	  //startIndex();
                   	 }catch(e){console.log(e);}
@@ -898,8 +907,8 @@ for(var l in stemplates.keys()){
 
 consola.info("START SCHEDULE");
 
-function updateLinks(update,list,size){
-(function(update){
+function updateLinks(upda,list,size){
+(function(updat){
   db.ref('/ethiopia/links/').once('value').then(function(snap){
 	  try{
 	  var links = Object.values(snap.val());
@@ -920,11 +929,11 @@ function updateLinks(update,list,size){
 	 	 firebaseCache.put('__-articles-__',[]); 
 	     consola.error('empty',e);
 	 }
-	 if(update){
+	 if(updat){
 	 	update(list,size)
 	 }
  });
-})(update);
+})(upda);
 }
 updateLinks();
 
@@ -1154,8 +1163,7 @@ if(GAZETA.index)
   startIndex();
 if(GAZETA.start)
 	//start();
-	update([]);
-
+	update();
 //db.ref('/ethiopia/').set({});
 //update();//, 180000);
 
