@@ -171,8 +171,8 @@ function covet_webp(dat, response){
                     file.acl.add(options, function(err, aclObject) {
                         
                     });
-                   pArt(dat.news, dat.cat); 
-                   //db.ref('/ethiopia/newsL/'+Hash).set(dat.news);
+                   //pArt(dat.news, dat.cat); 
+                   db.ref('/ethiopia/newsL/'+dat.hash).set(dat.news);
                    consola.info("converted and saved thumb.",dat.news.thumbnail);
                    response(dat.news, dat.cat);
               });
@@ -190,7 +190,7 @@ function covet_webp(dat, response){
               };
               fil.acl.add(options, function(err, aclObject) {});
               readwebp.pipe(thumbnlner).pipe(stream1);
-              pArt(dat.news,dat.cat)
+              pArt(dat.news,dat.cat);
               //db.ref('/ethiopia/newsL/'+dat.hash+'/cover_image').set(dat.news.cover_image);
               consola.info("converted and saved cover_image",dat.news[dat.cover_image]);                                     
           } 
@@ -238,6 +238,7 @@ function fetch(template, link,source,response, body, cat,covet_web){
 
   //if(!links.includes(link)) return;
   var hasIm;
+
   var hash = link.replace(/\.|\//g,'').hashCode();
   const dom = new JSDOM(body);//
   //consola.info(dom.window.document.body.innerHTML);
@@ -817,7 +818,7 @@ function fetch(template, link,source,response, body, cat,covet_web){
              }catch(e){consola.info('er',e);}
 
              
-            
+           // pArt(news, cat);
             if(!hasIm) response(news, cat);
        }catch(e){consola.error("ERROR",e);  }
 }
@@ -880,11 +881,11 @@ module.exports.reconvert_webp = function(){
 
 
 
-module.exports.postArt = function(news, categories){
+module.exports.postArt = function(news, categories,lastTime){
 
-  pArt(news,categories); 
+  pArt(news,categories,lastTime); 
 }
-function pArt(news, categories){
+function pArt(news, categories,lastTime){
   console.log(news);
   if(news.body)
     try{
@@ -932,6 +933,7 @@ function pArt(news, categories){
    if(vidc!=-1){
        db.ref('/ethiopia/'+categories[vidc].slice(categories[vidc].indexOf('_')+1)+'/Headlines/'+hash).set(news.timestamp);
    }
+   if(lastTime)
    for(var k=0; k<categories.length; k++){ 
         consola.info(categories[k]);
         var cat = categories[k];

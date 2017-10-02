@@ -842,13 +842,13 @@ function update(sss,force,categs){
    if((link.length>0 && !sss) || (link.length>0 && sss && (sss.length==0 || sss.includes(sauce)) ) ){
        (function(meta, link,sss){
        	var opts = {link:link,address:meta.address};
+       	scrapper.newSubseeds(opts, function(resp){
        	if(sss){
        		if(force) opts.force = true;
        		//opts.force = true;
        		opts.new = true;
        	}
-        scrapper.newSubseeds(opts, function(resp){
-          consola.info("SubSEEDs",meta,link,resp);
+        consola.info("SubSEEDs",meta,link,resp);
           if(!resp || resp.length===0){
             linksize--;
             if(linksize==0){
