@@ -874,7 +874,7 @@ function update(sss,force,categs){
                bot.sendMessage(381956489,'Remaining news: '+nacount); 
                bot.sendMessage(392957340,'Remaining news:' +nacount);
                if(nacount===0){
-                  //setTimeout(update, 7200000);
+                  setTimeout(update, 3600000);
                   setTimeout(function (){
                   	 try{
                   	  store.push(null);  
