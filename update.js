@@ -171,8 +171,8 @@ function covet_webp(dat, response){
                     file.acl.add(options, function(err, aclObject) {
                         
                     });
-                   //pArt(dat.news, dat.cat); 
-                   db.ref('/ethiopia/newsL/'+dat.hash).set(dat.news);
+                   pArt(dat.news, dat.cat); 
+                   //db.ref('/ethiopia/newsL/'+dat.hash).set(dat.news);
                    consola.info("converted and saved thumb.",dat.news.thumbnail);
                    response(dat.news, dat.cat);
               });
@@ -887,7 +887,8 @@ module.exports.postArt = function(news, categories,lastTime){
   pArt(news,categories,lastTime); 
 }
 function pArt(news, categories,lastTime){
-  console.log(news);
+
+  console.log('SSSSSSSSSSSSSSSSSSSS'+!news);
   if(news.body)
     try{
       var din = news.body.indexOf(news.date);
@@ -908,8 +909,7 @@ function pArt(news, categories,lastTime){
     }catch(e){consola.error("csynop",e); }
   //db.ref('/ethiopia/').set({}); return;
   //|| !(news.body || news.cover_audio)
-
-  if(Object.keys(news).length<=4 || !news.title) { 
+    if(Object.keys(news).length<=4 || !news.title || news.title.includes('500: ')) { 
 
     ban(news.link);
      bot.sendMessage(381956489,news.title+news.link);return; }try{
@@ -927,6 +927,9 @@ function pArt(news, categories,lastTime){
    var source = news.source; 
    var cats = [];
    var hash = link.replace(/\.|\//g,'').hashCode();
+    db.ref('/ethiopia/links/'+hash).set(link);
+    db.ref('/ethiopia/newsL/'+hash).set(news);
+    db.ref('/ethiopia/source/'+source+'/'+hash).set(news.timestamp);
    if(news.title.includes('Internal Error')){
          db.ref('/ethiopia/again/'+hash).set(news.link);
       }
@@ -950,9 +953,7 @@ function pArt(news, categories,lastTime){
     }
     //news.categories = cats;
     //news.lang =  'am';
-    db.ref('/ethiopia/links/'+hash).set(link);
-    db.ref('/ethiopia/newsL/'+hash).set(news);
-    db.ref('/ethiopia/source/'+source+'/'+hash).set(news.timestamp);
+  
 
     consola.info("SAVED",hash,news);
     firebaseCache.get('__-articles-__').push(link);

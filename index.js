@@ -863,6 +863,7 @@ function update(sss,force,categs){
              //consola.info(firebaseCache.get('__-articles-__').length);
              //if(!firebaseCache.get('__-articles-__').includes(resp[i]))
              scrapper.getNewArticle({link:resp[i], covet_webp:true,cat:meta.cat}, function(res,cat){
+             	console.log("CAT"+res+cat);
                if(!res ||  !cat) {}
                else {
                  scrapper.postArt(res,cat);
