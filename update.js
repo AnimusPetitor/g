@@ -171,7 +171,7 @@ function covet_webp(dat, response){
                     file.acl.add(options, function(err, aclObject) {
                         
                     });
-                   pArt(dat.news, dat.cat); 
+                   //pArt(dat.news, dat.cat); 
                    //db.ref('/ethiopia/newsL/'+dat.hash).set(dat.news);
                    consola.info("converted and saved thumb.",dat.news.thumbnail);
                    response(dat.news, dat.cat);
@@ -238,7 +238,7 @@ function fetch(template, link,source,response, body, cat,covet_web){
 
   //if(!links.includes(link)) return;
   var hasIm;
-
+  var bodydone;
   var hash = link.replace(/\.|\//g,'').hashCode();
   const dom = new JSDOM(body);//
   //consola.info(dom.window.document.body.innerHTML);
@@ -779,7 +779,8 @@ function fetch(template, link,source,response, body, cat,covet_web){
 
                         }
 
-                      
+                      //bodydone = true;
+                      //pArt(news, cat, true)
                       }catch(e){
                         consola.error('body '+e);
                       }
