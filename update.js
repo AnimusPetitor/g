@@ -816,7 +816,6 @@ function fetch(template, link,source,response, body, cat,covet_web){
                   
                  
              }catch(e){consola.info('er',e);}
-
              
            // pArt(news, cat);
 
