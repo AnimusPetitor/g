@@ -820,7 +820,7 @@ function fetch(template, link,source,response, body, cat,covet_web){
            // pArt(news, cat);
 
             if(!hasIm) response(news, cat);
-            else db.ref('/ethiopia/newsL/'+hash+'/'+'body').set(news.body);
+            //else db.ref('/ethiopia/newsL/'+hash+'/'+'body').set(news.body);
        }catch(e){consola.error("ERROR",e);  }
 }
 
@@ -934,7 +934,7 @@ function pArt(news, categories,lastTime){
    if(vidc!=-1){
        db.ref('/ethiopia/'+categories[vidc].slice(categories[vidc].indexOf('_')+1)+'/Headlines/'+hash).set(news.timestamp);
    }
-   if(lastTime)
+   //if(lastTime)
    for(var k=0; k<categories.length; k++){ 
         consola.info(categories[k]);
         var cat = categories[k];
