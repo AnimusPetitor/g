@@ -238,7 +238,7 @@ function fetch(template, link,source,response, body, cat,covet_web){
 
   //if(!links.includes(link)) return;
   var hasIm;
-  var bodydone;
+  var returned;
   var hash = link.replace(/\.|\//g,'').hashCode();
   const dom = new JSDOM(body);//
   //consola.info(dom.window.document.body.innerHTML);
@@ -776,6 +776,7 @@ function fetch(template, link,source,response, body, cat,covet_web){
                           }
                            
                           val = ret;
+                         
 
                         }
 
@@ -957,16 +958,16 @@ function pArt(news, categories,lastTime){
   
 
     consola.info("SAVED",hash,news);
-    firebaseCache.get('__-articles-__').push(link);
-    if(GAZETA.si || !GAZETA.force){
-      var tbi = news;
-     if(tbi.body){
-        tbi.body = news.body.toString().replace(/[,]+/g,' ').replace( /\r?\n|\r/g, '' ); 
-        tbi.hash = hash;
-      }
-      console.log('added to search'+hash);
-      store.push(tbi);  
-    }
+    //firebaseCache.get('__-articles-__').push(link);
+    //if(GAZETA.si || !GAZETA.force){
+      //var tbi = news;
+     //if(tbi.body){
+        //tbi.body = news.body.toString().replace(/[,]+/g,' ').replace( /\r?\n|\r/g, '' ); 
+        //tbi.hash = hash;
+      //}
+      //console.log('added to search'+hash);
+      //store.push(tbi);  
+    //}
     //+link.replace(/\.|\//g,'').hashCode(
     //db.ref('/ethiopia/newsL/')).push(news); 
      if(news.cover_image && news.cover_image.indexOf('.webp?')==-1 ){

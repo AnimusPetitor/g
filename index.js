@@ -865,7 +865,12 @@ function update(sss,force,categs){
              //if(!firebaseCache.get('__-articles-__').includes(resp[i]))
              scrapper.getNewArticle({link:resp[i], covet_webp:true,cat:meta.cat}, function(res,cat){
              	console.log("CAT"+res+cat);
-               if(!res ||  !cat) {}
+               if(!res ||  !cat) {
+               	///ban(res);
+               	nacount--;
+               	return;
+
+               }
                else {
                  scrapper.postArt(res,cat);
               }
