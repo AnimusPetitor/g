@@ -746,6 +746,15 @@ app.get('/s/getNews', (request, response) => {
        	response.send(snapshot.val());
       });
 })
+app.get('/s/g', (request, response) => { 
+   var link = request.query.q.replace(/\.|\//g,'').hashCode(); ;
+
+      if(!link) response.status(404).end();  
+      console.log(link);
+      db.ref('/ethiopia/newsL/'+link).once('value').then(function(snapshot) {
+       	response.send(snapshot.val());
+      });
+})
 var total = 0;
 var links = '';
 var langcount = 0;
@@ -1183,7 +1192,7 @@ if(GAZETA.start)
 //server.listen(server_port, server_ip_address, function () {
   //console.log( "Listening on " + server_ip_address + ", port " + server_port )
 //});
-//process.env.PORT || 8080
+//process.env.PORT || 80808080,'192.168.1.178'
 var server = app.listen(process.env.PORT || 8080, function () {
     var port = server.address().port;
    console.log("App now running on port", port);

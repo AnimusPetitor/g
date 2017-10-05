@@ -171,10 +171,10 @@ function covet_webp(dat, response){
                     file.acl.add(options, function(err, aclObject) {
                         
                     });
-                   //pArt(dat.news, dat.cat); 
+                   ////pArt(dat.news, dat.cat); 
                    //db.ref('/ethiopia/newsL/'+dat.hash).set(dat.news);
                    consola.info("converted and saved thumb.",dat.news.thumbnail);
-                   response(dat.news, dat.cat);
+                   //response(dat.news, dat.cat);
               });
               var readwebp = bucket.file(dat.cover_image+dat.hash+'.webp').createReadStream();
               readwebp.on('error',function (e){
@@ -421,13 +421,13 @@ function fetch(template, link,source,response, body, cat,covet_web){
                        val = tem.textContent.replace(/[\n\t]+/g,'').trim();
                      if(item==='date')try{
 
-                       var cnt = dtot(val);
-                       if(!isNaN(cnt))
-                       news['timestamp'] = cnt;
-                       else {
-                        consola.info('NEWDATE?',val);
-                        news.failcount = news.failcount ++;
-                       }
+                      // var cnt = dtot(val);
+                       //if(!isNaN(cnt))
+                       //news['timestamp'] = cnt;
+                       //else {
+                       // consola.info('NEWDATE?',val);
+                        //news.failcount = news.failcount ++;
+                       //}
                      }catch(e){consola.error(e);}
                     }
              
