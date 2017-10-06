@@ -421,8 +421,9 @@ function fetch(template, link,source,response, body, cat,covet_web){
                        val = tem.textContent.replace(/[\n\t]+/g,'').trim();
                      if(item==='date')try{
 
-                      // var cnt = dtot(val);
-                       //if(!isNaN(cnt))
+                       //var cnt = dtot(val);
+                       //if(!isNaN(cnt)){
+                        //if(cnt<1507239100008){break; response(); ban(news.link);}
                        //news['timestamp'] = cnt;
                        //else {
                        // consola.info('NEWDATE?',val);
@@ -934,16 +935,12 @@ function pArt(news, categories,lastTime){
     db.ref('/ethiopia/links/'+hash).set(link);
     db.ref('/ethiopia/newsL/'+hash).set(news);
     db.ref('/ethiopia/source/'+source+'/'+hash).set(news.timestamp);
-   if(news.title.includes('Internal Error')){
+   if(news.title.includes('Internal Error') || news.title.trim()==='Error'){
          db.ref('/ethiopia/again/'+hash).set(news.link);
       }
    var vidc = categories.indexOf('Video_am') || categories.indexOf('Video_en');
    if(vidc!=-1){
-       //if(except){
-         //try{
-         //news.timestamp = dtot(news.title.slice(news.title.indexOf('...')+3).trim());
-         //}catch(e){console.log(e);}
-       //}
+     
        db.ref('/ethiopia/'+categories[vidc].slice(categories[vidc].indexOf('_')+1)+'/Headlines/'+hash).set(news.timestamp);
 
    }

@@ -88,6 +88,9 @@ function isNumeric(value){
 
 var approximate = function (ret){
    consola.info(ret);
+   if(parseInt(ret[1]) >= 13){
+    return new Date(0,0,0).getTime();
+   }
    if(ret[3]){
      var dadd = 9;
      consola.info(ret[1]);
@@ -113,6 +116,7 @@ var approximate = function (ret){
       ret[1] = m_n[sw];
    } 
    consola.info('klll',ret);
+   
    return new Date(ret[2], typeof ret[1] === 'string' ? parseInt(ret[1])-1: ret[1]-1 , parseInt(ret[0])+1).getTime();
 }
 global.CATEGORIES = ['Headlines', 'Entertainment', 'Social', 'World','Politics','Business', 'Art and Culture','Technology','Sport','Health','Audio','Video'];

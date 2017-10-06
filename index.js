@@ -176,7 +176,11 @@ bot.on('text', (msg) => {
     		if(msg.text.length > 10) ban(msg.text.slice(5));		
     	}
     	else if(msg.text.startsWith('/gdel ')){
-    	    del(msg.text.slice(6));		
+    		var two = msg.text.slice(6).split(" ");
+            if(two.length==1 ){
+ del(msg.text.slice(6));	
+            }else del(two[0],two[1]);
+    	   	
     	}else if(msg.text.startsWith('/zup ')){
     	   updateZombie(msg.text.slice(5));
     	}
@@ -1223,7 +1227,7 @@ function updateZombie(source){
   });                  
 }
 
-function del(source){
+function del(source,cond){
 	console.log(source+":"+source.length);
   db.ref('/ethiopia/source/'+source).once('value').then (function(snapshot){
   try{
@@ -1244,7 +1248,7 @@ function del(source){
 		      		console.log(hash);
 		      		db.ref('ethiopia/newsL/'+hash).remove();
 		      		db.ref('ethiopia/'+source+'/'+hash).remove();
-		      		db.ref('ethiopia/links/'+hash).remove();
+		      		if(!cond)db.ref('ethiopia/links/'+hash).remove();
 		      		
       //	}
       }
