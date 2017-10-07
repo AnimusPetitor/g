@@ -882,8 +882,7 @@ function update(sss,force,categs){
                if(!res ||  !cat) {
                	///ban(res);
                	nacount--;
-               	return;
-
+               	//return;
                }
                else {
                  scrapper.postArt(res,cat);
