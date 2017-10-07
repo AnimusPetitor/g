@@ -837,6 +837,7 @@ var startIndex = function(){
     }     
 };
 
+var lastt ;
 function update(sss,force,categs){
   store = new Readable( {objectMode: true} );
   store.on('error',function (e){
@@ -892,16 +893,20 @@ function update(sss,force,categs){
                bot.sendMessage(381956489,'Remaining news: '+nacount); 
                bot.sendMessage(392957340,'Remaining news:' +nacount);
                if(nacount===0){
-                  setTimeout(update, 3600000);
-                  setTimeout(function (){
-                  	 try{
-                  	  store.push(null);  
-    				  store.pipe(Searchindex.defaultPipeline()).pipe(Searchindex.add()); 
-    				  store = new Readable( {objectMode: true} );
-                  	  consola.info("UPDATE DONE!");
-                  	  //startIndex();
-                  	 }catch(e){console.log(e);}
-                     }, 10000);
+               	  var now = Date.now(); 
+               	  if(now - lastt > 3600000){	
+	                  setTimeout(update, 3600000);
+	                  setTimeout(function (){
+	                  	 try{
+	                  	  store.push(null);  
+	    				  store.pipe(Searchindex.defaultPipeline()).pipe(Searchindex.add()); 
+	    				  store = new Readable( {objectMode: true} );
+	                  	  consola.info("UPDATE DONE!");
+	                  	  //startIndex();
+	                  	  lastt = Date.now();
+	                  	 }catch(e){console.log(e);}
+	                     }, 10000);
+	              }
                   //setTimeout(
                   //startIndex();//,180000);
                   //buildSearchI();
