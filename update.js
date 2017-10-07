@@ -174,7 +174,7 @@ function covet_webp(dat, response){
                    ////pArt(dat.news, dat.cat); 
                    //db.ref('/ethiopia/newsL/'+dat.hash).set(dat.news);
                    consola.info("converted and saved thumb.",dat.news.thumbnail);
-                   //response(dat.news, dat.cat);
+                   response(dat.news, dat.cat);
               });
               var readwebp = bucket.file(dat.cover_image+dat.hash+'.webp').createReadStream();
               readwebp.on('error',function (e){
