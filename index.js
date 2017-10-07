@@ -893,7 +893,8 @@ function update(sss,force,categs){
                bot.sendMessage(392957340,'Remaining news:' +nacount);
                if(nacount===0){
                	  var now = Date.now(); 
-               	  if(now - lastt > 3600000){	
+               	  if(now - lastt > 3600000){
+               	      lastt = Date.now();	
 	                  setTimeout(update, 3600000);
 	                  setTimeout(function (){
 	                  	 try{
@@ -902,7 +903,7 @@ function update(sss,force,categs){
 	    				  store = new Readable( {objectMode: true} );
 	                  	  consola.info("UPDATE DONE!");
 	                  	  //startIndex();
-	                  	  lastt = Date.now();
+	                  	  
 	                  	 }catch(e){console.log(e);}
 	                     }, 10000);
 	              }
