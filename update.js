@@ -605,8 +605,9 @@ function fetch(template, link,source,response, body, cat,covet_web){
                           var i = 0, p = 0, a =0;
                           for(var l=0; l<childs.length; l++){ 
                             if(end) break;
-                            if(template['__boundary'] && childs[l].querySelector('[class="'+template['__boundary']+'"]')) break;
+                            
                            if(childs[l].nodeType===1){
+                              
                               if(template['__boundary'] && childs[l].querySelector('[class="'+template['__boundary']+'"]')) break;
                               var hasVideo = childs[l].querySelector('[class="'+video_cln+'"]') || childs[l].className===video_cln;
                               var hasAudio = childs[l].querySelector('[class="'+audio_cln+'"]');
