@@ -893,7 +893,10 @@ function update(sss,force,categs){
                bot.sendMessage(392957340,'Remaining news:' +nacount);
                if(nacount===0){
                	  var now = Date.now(); 
+               	  bot.sendMessage(381956489,'Delta: '+now - lastt + '>' + 3600000); 
+                  bot.sendMessage(392957340,'Delta: ' +now - lastt + '>' + 3600000);
                	  if(now - lastt > 3600000){
+
                	      lastt = Date.now();	
 	                  setTimeout(update, 3600000);
 	                  setTimeout(function (){
@@ -929,8 +932,17 @@ function update(sss,force,categs){
 for(var l in stemplates.keys()){
   consola.info('updating ',l);
 }
-
+ 
 consola.info("START SCHEDULE");
+startbanking = function() {
+	var bankss = Array.from(banks.keys());
+	console.log(bankss.length);
+	for(var m=0; m<bankss.length; m++){
+		
+
+		(function(s){console.log(bankss[m]); scrapper.csvify(s);})(bankss[m])
+	}
+}
 
 function updateLinks(upda,list,size){
 (function(updat){

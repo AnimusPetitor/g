@@ -137,11 +137,29 @@ global.gcs = require('@google-cloud/storage')({
 global.bucket = gcs.bucket('gazeta-bb838.appspot.com');
 global.sharp = require('sharp');
 global.request = require('cloudscraper');
-
+global.banks = new Map();
 global.banlist = [];
 db.ref('/ethiopia/bannedlink/').once('value').then (function(snapshot){
   banlist = Object.values(snapshot.val());
 });
+
+global.startbanking = null;
+
+/*request.get("https://gazeta-bb838.firebaseio.com/ethiopia/bannedlink/bankseeds.json", function(err, respons, body) {
+  try{
+   var r = JSON.parse(body);
+
+    for(var i in r){
+        console.log(i);
+        console.log(r[i]);
+        banks.set(i, r[i]);
+        consola.info(i,banks.get(i)); 
+        
+    }
+    startbanking();
+  }catch(e){consola.info(e,r);}
+});*/
+
 global.ban = function(link){
   banlist.push(link.trim());
 

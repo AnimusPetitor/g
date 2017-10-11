@@ -23,6 +23,69 @@ db.ref('/seeds/').once('value').then(function(snapshot) {
   }   
 });
  
+module.exports.csvify = function(bank) {
+  var checkn = function (c){
+      console.log(bank);
+      var a = banks.get(bank);  
+      var link = a.link;
+      var address = a.address;
+      (function(c){
+         request.get(link, function(err, respons, body) {
+
+         try{
+         const dom = new JSDOM(body);
+
+         console.log(dom.window.document.href);
+         var rows; 
+         if(!address)
+
+          rows = dom.window.document.body.getElementsByTagName("table")[0].getElementsByTagName("tr");  
+
+         else {
+          try{
+
+             var rcln = address.slice(address.indexOf('xxx')+3,address.indexOf('vvv'));
+             //console.log(dom.window.document.body.getElementsByClassName(rcln)[0].getElementsByTagName("table")[0].getElementsByTagName("tr"));
+
+            rows = dom.window.document.body.getElementsByClassName(rcln)[0].getElementsByTagName("table")[0].getElementsByTagName("tr"); 
+          }catch(e){console.log(e);}
+             //console.log(rlist.innerHTML);
+             //rows = dom.window.document.body.getElementsByTagName("table")[0].getElementsByTagName("tr");  
+
+         }
+         console.log(rows.length);
+         for(var i=0; i<rows.length; i++){
+          try{
+            //parse,check,update/skip
+            var csv = rows[i].getElementsByTagName("td");
+            var ret = '';
+            for(var g=0; g<csv.length; g++){
+               if(g!=0)ret += csv[g].textContent.trim() + (g<csv.length-1?"::":""); 
+              
+               if(g==csv.length-1 && csv[0].textContent.trim().length===3)db.ref('/ethiopia/banks/'+bank+'/'+csv[0].textContent.trim()).set(ret);
+            }
+            console.log(ret);
+            //if(!c[bank] || true){
+                //update
+            //}
+             
+           }catch(e){
+            console.log(e);
+           } 
+         }   
+         
+        }catch(e){
+          //console.log(e);
+        }  
+      });
+       })(c)
+  } 
+  request.get("https://gazeta-bb838.firebaseio.com/ethiopia/bannedlink/banks/"+bank+".json", function(err, respons, body) {
+     checkn(JSON.parse(body));
+  });
+  
+}
+
 module.exports.seeds = function(source, callback){
   consola.info('getting seeds from '+source);
   var all = source === 'all'; 
