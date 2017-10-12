@@ -197,7 +197,7 @@ var cmap = {
 
 ///var clist = Array.from(cmap.values()); 
 //var ckyes = Array.from(cmap.keys());
-module.exports.csvify = function (bank,again){
+module.exports.csvify = function (bank,again,chat){
   csv(bank,again);
 }
 
@@ -293,7 +293,7 @@ function csv (bank, again) {
                   else key = 'CAD';
                 } 
 
-              bot.sendMessage(381956489,bank+": "+ key + " -> "+ret); 
+              bot.sendMessage(chat,bank+": "+ key + " -> "+ret); 
              //  bot.sendMessage(392957340,bank+": " key + " -> "+ret);
 
                 if(key.length>0)db.ref('/ethiopia/banks/'+bank+'/'+key).set(ret);

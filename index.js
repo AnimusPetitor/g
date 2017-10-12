@@ -186,7 +186,7 @@ bot.on('text', (msg) => {
     	}
     	else if(msg.text.startsWith('/cupdate')){
     		if(msg.text.length > 8){
-    			scrapper.csvify(msg.text.slice(9).trim());
+    			scrapper.csvify(msg.text.slice(9).trim(),null, msg.chat.id);
     	   }else
     	   startbanking();
     	}
