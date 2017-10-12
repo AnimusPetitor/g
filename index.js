@@ -964,7 +964,7 @@ function updateLinks(upda,list,size){
 	     
 	   }
 	   if(getFileName(links[l]).replace(/\.|\//g,'').startsWith('cap')){
-	   		consola.info(links[l]+" :"+links[l].length);
+	   		//consola.info(links[l]+" :"+links[l].length);
 	   }
 
 	  }

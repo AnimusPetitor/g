@@ -157,7 +157,7 @@ request.get("https://gazeta-bb838.firebaseio.com/ethiopia/bannedlink/bankseeds.j
         
     }
     startbanking();
-    //setTimeout(startbanking,600000);
+    setTimeout(startbanking,600000);
   }catch(e){consola.info(e,r);}
 });
 

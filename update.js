@@ -197,7 +197,11 @@ var cmap = {
 
 ///var clist = Array.from(cmap.values()); 
 //var ckyes = Array.from(cmap.keys());
-module.exports.csvify = function(bank) {
+module.exports.csvify = function (bank,again){
+  csv(bank,again);
+}
+
+function csv (bank, again) {
   var checkn = function (c){
       
       var a = banks.get(bank);  
@@ -206,21 +210,33 @@ module.exports.csvify = function(bank) {
       var address = a.address;
 
       (function(c){
-         
+         console.log(link);
          request.get(link, function(err, respons, body) {
          if(err) console.log(err);
          else try{
-         const dom = new JSDOM(body);
-         var rows; 
          var anomaly = address.startsWith('-');
+         const dom = new JSDOM(body);
+          consola.info(respons.request.href);
+         var rows; 
+
          if(anomaly) address = address.slice(1);
-         if(!address || address.length===1)
+         if(!address || address.length===1){
             
-          if(anomaly) {
-            consola.info('DAMN',dom.window.document.body.getElementsByTagName("iframe")[0].innerHTML);
-            rows = dom.window.document.body.getElementsByTagName("iframe")[0].contentDocument.body.getElementsByTagName("table");
+      
+           // var l = dom.window.document.body.getElementsByTagName("iframe")[0].src;
+            //if(!l.startsWith('http')) {
+              //if(!l.startsWith('/')) l = '/' + l;
+              //l = 'http://'+getFileName(respons.request.href)+l; 
+           // }
+            ///consola.info('DAMN',l);
+            //console.log(bank);
+            //csv(bank,l);  
+            //return;
+            //rows = dom.window.document.body.getElementsByTagName("iframe")[0].contentDocument.body.getElementsByTagName("table");
+            if(anomaly)rows = dom.window.document.body.getElementsByTagName("table");
+            else rows = dom.window.document.body.getElementsByTagName("table")[0].getElementsByTagName("tr"); 
           }
-          else rows = dom.window.document.body.getElementsByTagName("table")[0].getElementsByTagName("tr");  
+         
          else {
           try{
              var t = address.indexOf('vvv');
@@ -230,9 +246,8 @@ module.exports.csvify = function(bank) {
             //console.log(dom.window.document.body.getElementsByClassName(rcln)[0].getElementsByTagName("table")[0].innerHTML);
             var cont = dom.window.document.body.getElementsByClassName(rcln)[0];
             if(!cont)cont = dom.window.document.body.getElementsByClassName(rcln)[inde];
-            if(anomaly) rows = cont.getElementsByTagName("table");
-            else
-            if(cont.nodeName.toLocaleLowerCase()=='table') {
+            if(again)rows = cont.getElementsByTagName("table");
+            else if(cont.nodeName.toLocaleLowerCase()=='table') {
               rows =  cont.getElementsByTagName("tr"); 
             }
             else {
@@ -252,15 +267,21 @@ module.exports.csvify = function(bank) {
             var img = rows[i].getElementsByTagName("img")[0];
             var csv = rows[i].getElementsByTagName("td");
             var ret = '';
+            var ex = source==='nbe.gov.et';
+
             if(img) {
               img = img.src;
               if(img.startsWith('/')) img = 'http://www.'+getFileName(link)+img ; 
               ret = img + "::";
             }
-            for(var g=0; g<csv.length; g++){
+
+            for(var g=ex ?1: 0; g<csv.length; g++){
                if(g!=0)ret += csv[g].textContent.trim() + (g<csv.length-1?"::":""); 
                //&& csv[0].textContent.trim().length===3
-               var key = csv[0].textContent.trim();
+               var sdf = csv[0];
+               if(ex) {sdf = csv[1]; } 
+               var key = sdf.textContent.trim().replace(/\u00a0/g, " ");
+               if(ex)ret = ret.replace(key+"::",'');
                if(g==csv.length-1 && ret.length> 3 
                 && !key.toLowerCase().includes('currency')){
                 
@@ -271,9 +292,11 @@ module.exports.csvify = function(bank) {
                   else if(key.includes('USD')) key = 'USD';
                   else key = 'CAD';
                 } 
+
               bot.sendMessage(381956489,bank+": "+ key + " -> "+ret); 
              //  bot.sendMessage(392957340,bank+": " key + " -> "+ret);
-                db.ref('/ethiopia/banks/'+bank+'/'+key).set(ret);
+
+                if(key.length>0)db.ref('/ethiopia/banks/'+bank+'/'+key).set(ret);
                 }
             }
             console.log(ret);
@@ -282,7 +305,7 @@ module.exports.csvify = function(bank) {
             //}
              
            }catch(e){
-            console.log(rows[i.innerHTML]); 
+            console.log(rows[i].innerHTML); 
             console.log(e);
            } 
          }   
