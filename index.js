@@ -184,6 +184,12 @@ bot.on('text', (msg) => {
     	}else if(msg.text.startsWith('/zup ')){
     	   updateZombie(msg.text.slice(5));
     	}
+    	else if(msg.text.starswith('/cupdate')){
+    		if(msg.text.length > 8){
+    			scrapper.csvify(msg.text.slice(9).trim());
+    	   }else
+    	   startbanking();
+    	}
         else if(msg.text.startsWith('/gupdate')){
           console.log(msg.text.trim().length);	
           //update links
@@ -837,7 +843,7 @@ var startIndex = function(){
     }     
 };
 
-var lastt ;
+var lastt = 0;
 function update(sss,force,categs){
   store = new Readable( {objectMode: true} );
   store.on('error',function (e){
@@ -893,7 +899,9 @@ function update(sss,force,categs){
                bot.sendMessage(392957340,'Remaining news:' +nacount);
                if(nacount===0){
                	  var now = Date.now(); 
+
                	  bot.sendMessage(381956489,'Delta: '+now - lastt + '>' + 3600000); 
+               	  console.log(now - lastt + '>' + 3600000);
                   bot.sendMessage(392957340,'Delta: ' +now - lastt + '>' + 3600000);
                	  if(now - lastt > 3600000){
 

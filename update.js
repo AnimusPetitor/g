@@ -23,19 +23,193 @@ db.ref('/seeds/').once('value').then(function(snapshot) {
   }   
 });
  
+var cmap = {
+  'AED': 'د.إ',
+  'AFN': '؋',
+  'ALL': 'L',
+  'AMD': '֏',
+  'ANG': 'ƒ',
+  'AOA': 'Kz',
+  'ARS': '$',
+  'AUD': '$',
+  'AWG': 'ƒ',
+  'AZN': 'ман',
+  'BAM': 'KM',
+  'BBD': '$',
+  'BDT': '৳',
+  'BGN': 'лв',
+  'BHD': '.د.ب',
+  'BIF': 'FBu',
+  'BMD': '$',
+  'BND': '$',
+  'BOB': '$b',
+  'BRL': 'R$',
+  'BSD': '$',
+  'BTC': '฿',
+  'BTN': 'Nu.',
+  'BWP': 'P',
+  'BYR': 'p.',
+  'BZD': 'BZ$',
+  'CAD': '$',
+  'CDF': 'FC',
+  'CHF': 'CHF',
+  'CLP': '$',
+  'CNY': '¥',
+  'COP': '$',
+  'CRC': '₡',
+  'CUC': '$',
+  'CUP': '₱',
+  'CVE': '$',
+  'CZK': 'Kč',
+  'DJF': 'Fdj',
+  'DKK': 'kr',
+  'DOP': 'RD$',
+  'DZD': 'دج',
+  'EEK': 'kr',
+  'EGP': '£',
+  'ERN': 'Nfk',
+  'ETB': 'Br',
+  'ETH': 'Ξ',
+  'EUR': '€',
+  'FJD': '$',
+  'FKP': '£',
+  'GBP': '£',
+  'GEL': '₾',
+  'GGP': '£',
+  'GHC': '₵',
+  'GHS': 'GH₵',
+  'GIP': '£',
+  'GMD': 'D',
+  'GNF': 'FG',
+  'GTQ': 'Q',
+  'GYD': '$',
+  'HKD': '$',
+  'HNL': 'L',
+  'HRK': 'kn',
+  'HTG': 'G',
+  'HUF': 'Ft',
+  'IDR': 'Rp',
+  'ILS': '₪',
+  'IMP': '£',
+  'INR': '₹',
+  'IQD': 'ع.د',
+  'IRR': '﷼',
+  'ISK': 'kr',
+  'JEP': '£',
+  'JMD': 'J$',
+  'JOD': 'JD',
+  'JPY': '¥',
+  'KES': 'KSh',
+  'KGS': 'лв',
+  'KHR': '៛',
+  'KMF': 'CF',
+  'KPW': '₩',
+  'KRW': '₩',
+  'KWD': 'KD',
+  'KYD': '$',
+  'KZT': 'лв',
+  'LAK': '₭',
+  'LBP': '£',
+  'LKR': '₨',
+  'LRD': '$',
+  'LSL': 'M',
+  'LTC': 'Ł',
+  'LTL': 'Lt',
+  'LVL': 'Ls',
+  'LYD': 'LD',
+  'MAD': 'MAD',
+  'MDL': 'lei',
+  'MGA': 'Ar',
+  'MKD': 'ден',
+  'MMK': 'K',
+  'MNT': '₮',
+  'MOP': 'MOP$',
+  'MUR': '₨',
+  'MVR': 'Rf',
+  'MWK': 'MK',
+  'MXN': '$',
+  'MYR': 'RM',
+  'MZN': 'MT',
+  'NAD': '$',
+  'NGN': '₦',
+  'NIO': 'C$',
+  'NOK': 'kr',
+  'NPR': '₨',
+  'NZD': '$',
+  'OMR': '﷼',
+  'PAB': 'B/.',
+  'PEN': 'S/.',
+  'PGK': 'K',
+  'PHP': '₱',
+  'PKR': '₨',
+  'PLN': 'zł',
+  'PYG': 'Gs',
+  'QAR': '﷼',
+  'RMB': '￥',
+  'RON': 'lei',
+  'RSD': 'Дин.',
+  'RUB': '₽',
+  'RWF': 'R₣',
+  'SAR': '﷼',
+  'SBD': '$',
+  'SCR': '₨',
+  'SDG': 'ج.س.',
+  'SEK': 'kr',
+  'SGD': '$',
+  'SHP': '£',
+  'SLL': 'Le',
+  'SOS': 'S',
+  'SRD': '$',
+  'SSP': '£',
+  'STD': 'Db',
+  'SVC': '$',
+  'SYP': '£',
+  'SZL': 'E',
+  'THB': '฿',
+  'TJS': 'SM',
+  'TMT': 'T',
+  'TND': 'د.ت',
+  'TOP': 'T$',
+  'TRL': '₤',
+  'TRY': '₺',
+  'TTD': 'TT$',
+  'TVD': '$',
+  'TWD': 'NT$',
+  'TZS': 'TSh',
+  'UAH': '₴',
+  'UGX': 'USh',
+  'USD': '$',
+  'UYU': '$U',
+  'UZS': 'лв',
+  'VEF': 'Bs',
+  'VND': '₫',
+  'VUV': 'VT',
+  'WST': 'WS$',
+  'XAF': 'FCFA',
+  'XBT': 'Ƀ',
+  'XCD': '$',
+  'XOF': 'CFA',
+  'XPF': '₣',
+  'YER': '﷼',
+  'ZAR': 'R',
+  'ZWD': 'Z$'
+};
+
+///var clist = Array.from(cmap.values()); 
+//var ckyes = Array.from(cmap.keys());
 module.exports.csvify = function(bank) {
   var checkn = function (c){
-      console.log(bank);
+      
       var a = banks.get(bank);  
       var link = a.link;
+
       var address = a.address;
       (function(c){
+         
          request.get(link, function(err, respons, body) {
-
-         try{
+         if(err) console.log(err);
+         else try{
          const dom = new JSDOM(body);
-
-         console.log(dom.window.document.href);
          var rows; 
          if(!address)
 
@@ -43,26 +217,51 @@ module.exports.csvify = function(bank) {
 
          else {
           try{
-
-             var rcln = address.slice(address.indexOf('xxx')+3,address.indexOf('vvv'));
+             var t = address.indexOf('vvv');
+             var rcln = address.slice(address.indexOf('xxx')+3,t);
+             var inde = parseInt(address.slice(t+3));
              //console.log(dom.window.document.body.getElementsByClassName(rcln)[0].getElementsByTagName("table")[0].getElementsByTagName("tr"));
+            //console.log(dom.window.document.body.getElementsByClassName(rcln)[0].getElementsByTagName("table")[0].innerHTML);
+            var cont = dom.window.document.body.getElementsByClassName(rcln)[0];
+            if(!cont)cont = dom.window.document.body.getElementsByClassName(rcln)[inde];
 
-            rows = dom.window.document.body.getElementsByClassName(rcln)[0].getElementsByTagName("table")[0].getElementsByTagName("tr"); 
+            if(cont.nodeName.toLocaleLowerCase()=='table') rows =  cont.getElementsByTagName("tr"); 
+            else rows = cont.getElementsByTagName("table")[0].getElementsByTagName("tr"); 
           }catch(e){console.log(e);}
              //console.log(rlist.innerHTML);
              //rows = dom.window.document.body.getElementsByTagName("table")[0].getElementsByTagName("tr");  
 
          }
-         console.log(rows.length);
+         consola.info(link,rows.length);
          for(var i=0; i<rows.length; i++){
           try{
+            var source = getFileName(link);
+            consola.info(source);
             //parse,check,update/skip
+            var img = rows[i].getElementsByTagName("img")[0];
             var csv = rows[i].getElementsByTagName("td");
             var ret = '';
+            if(img) {
+              img = img.src;
+              if(img.startsWith('/')) img = 'http://www.'+getFileName(link)+img ; 
+              ret = img + "::";
+            }
             for(var g=0; g<csv.length; g++){
                if(g!=0)ret += csv[g].textContent.trim() + (g<csv.length-1?"::":""); 
-              
-               if(g==csv.length-1 && csv[0].textContent.trim().length===3)db.ref('/ethiopia/banks/'+bank+'/'+csv[0].textContent.trim()).set(ret);
+               //&& csv[0].textContent.trim().length===3
+               var key = csv[0].textContent.trim();
+               if(g==csv.length-1 && ret.length> 3 
+                && !key.toLowerCase().includes('currency')){
+                
+                if(source==='zemenbank.com'){
+                  if(key.includes('EUR'))key = 'EUR';
+                  else if(key.includes('GBP')) key = 'GBP';
+                  else if(key.includes('CHF')) key = 'CHF';
+                  else if(key.includes('USD')) key = 'USD';
+                  else key = 'CAD';
+                } 
+                db.ref('/ethiopia/banks/'+bank+'/'+key).set(ret);
+                }
             }
             console.log(ret);
             //if(!c[bank] || true){
@@ -70,6 +269,7 @@ module.exports.csvify = function(bank) {
             //}
              
            }catch(e){
+            console.log(rows[i.innerHTML]); 
             console.log(e);
            } 
          }   

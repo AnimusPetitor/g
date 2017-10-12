@@ -145,7 +145,7 @@ db.ref('/ethiopia/bannedlink/').once('value').then (function(snapshot){
 
 global.startbanking = null;
 
-/*request.get("https://gazeta-bb838.firebaseio.com/ethiopia/bannedlink/bankseeds.json", function(err, respons, body) {
+request.get("https://gazeta-bb838.firebaseio.com/ethiopia/bannedlink/bankseeds.json", function(err, respons, body) {
   try{
    var r = JSON.parse(body);
 
@@ -158,7 +158,7 @@ global.startbanking = null;
     }
     startbanking();
   }catch(e){consola.info(e,r);}
-});*/
+});
 
 global.ban = function(link){
   banlist.push(link.trim());
