@@ -201,7 +201,7 @@ module.exports.csvify = function (bank,again,chat){
   csv(bank,again,chat);
 }
 
-function csv (bank, again) {
+function csv (bank, again,chat) {
   var checkn = function (c){
       
       var a = banks.get(bank);  
