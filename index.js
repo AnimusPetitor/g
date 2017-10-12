@@ -184,7 +184,7 @@ bot.on('text', (msg) => {
     	}else if(msg.text.startsWith('/zup ')){
     	   updateZombie(msg.text.slice(5));
     	}
-    	else if(msg.text.starswith('/cupdate')){
+    	else if(msg.text.startsWith('/cupdate')){
     		if(msg.text.length > 8){
     			scrapper.csvify(msg.text.slice(9).trim());
     	   }else

@@ -204,6 +204,7 @@ module.exports.csvify = function(bank) {
       var link = a.link;
 
       var address = a.address;
+
       (function(c){
          
          request.get(link, function(err, respons, body) {
@@ -211,10 +212,15 @@ module.exports.csvify = function(bank) {
          else try{
          const dom = new JSDOM(body);
          var rows; 
-         if(!address)
-
-          rows = dom.window.document.body.getElementsByTagName("table")[0].getElementsByTagName("tr");  
-
+         var anomaly = address.startsWith('-');
+         if(anomaly) address = address.slice(1);
+         if(!address || address.length===1)
+            
+          if(anomaly) {
+            consola.info('DAMN',dom.window.document.body.getElementsByTagName("iframe")[0].innerHTML);
+            rows = dom.window.document.body.getElementsByTagName("iframe")[0].contentDocument.body.getElementsByTagName("table");
+          }
+          else rows = dom.window.document.body.getElementsByTagName("table")[0].getElementsByTagName("tr");  
          else {
           try{
              var t = address.indexOf('vvv');
@@ -224,9 +230,14 @@ module.exports.csvify = function(bank) {
             //console.log(dom.window.document.body.getElementsByClassName(rcln)[0].getElementsByTagName("table")[0].innerHTML);
             var cont = dom.window.document.body.getElementsByClassName(rcln)[0];
             if(!cont)cont = dom.window.document.body.getElementsByClassName(rcln)[inde];
-
-            if(cont.nodeName.toLocaleLowerCase()=='table') rows =  cont.getElementsByTagName("tr"); 
-            else rows = cont.getElementsByTagName("table")[0].getElementsByTagName("tr"); 
+            if(anomaly) rows = cont.getElementsByTagName("table");
+            else
+            if(cont.nodeName.toLocaleLowerCase()=='table') {
+              rows =  cont.getElementsByTagName("tr"); 
+            }
+            else {
+              rows = cont.getElementsByTagName("table")[0].getElementsByTagName("tr"); 
+            }
           }catch(e){console.log(e);}
              //console.log(rlist.innerHTML);
              //rows = dom.window.document.body.getElementsByTagName("table")[0].getElementsByTagName("tr");  
@@ -260,6 +271,8 @@ module.exports.csvify = function(bank) {
                   else if(key.includes('USD')) key = 'USD';
                   else key = 'CAD';
                 } 
+              bot.sendMessage(381956489,bank+": "+ key + " -> "+ret); 
+             //  bot.sendMessage(392957340,bank+": " key + " -> "+ret);
                 db.ref('/ethiopia/banks/'+bank+'/'+key).set(ret);
                 }
             }
