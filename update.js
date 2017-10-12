@@ -198,7 +198,7 @@ var cmap = {
 ///var clist = Array.from(cmap.values()); 
 //var ckyes = Array.from(cmap.keys());
 module.exports.csvify = function (bank,again,chat){
-  csv(bank,again);
+  csv(bank,again,chat);
 }
 
 function csv (bank, again) {
