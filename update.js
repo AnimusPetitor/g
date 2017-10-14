@@ -834,7 +834,7 @@ function fetch(template, link,source,response, body, cat,covet_web){
                                           //ret[ret.length-1] = ret[ret.length-1] + ">>"+node.textContent+"/>";   
                                         }else if(node.nodeName==='IFRAME'){
                                           //ret.push();
-                                          ret.push('+++'+node.src);
+                                          ret.push('___'+node.src);
                                           //ret[ret.length-1] = ret[ret.length-1] + ">>"+node.textContent+"/>";   
                                         }
                                         else if(node.nodeName==='P'){
