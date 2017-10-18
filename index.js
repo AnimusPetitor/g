@@ -897,9 +897,10 @@ function update(sss,force,categs){
                consola.info(nacount);
                bot.sendMessage(381956489,'Remaining news: '+nacount); 
                bot.sendMessage(392957340,'Remaining news:' +nacount);
-               if(nacount===0){
+                
+               //if(nacount===0){
                	  var now = Date.now(); 
-
+                  if(!lastt) lastt = 0;
                	  bot.sendMessage(381956489,'Delta: '+now - lastt + '>' + 3600000); 
                	  console.log(now - lastt + '>' + 3600000);
                   bot.sendMessage(392957340,'Delta: ' +now - lastt + '>' + 3600000);
@@ -917,13 +918,14 @@ function update(sss,force,categs){
 	                  	  
 	                  	 }catch(e){console.log(e);}
 	                     }, 10000);
-	              }
+                     startbanking();
+	             }
                   //setTimeout(
                   //startIndex();//,180000);
                   //buildSearchI();
                   //setTimeout(update, GAZETA.updateD);//1800000
 
-               }
+               //}
              });
              //else nacount--;
           }
