@@ -901,11 +901,11 @@ function update(sss,force,categs){
                //if(nacount===0){
                	  var now = Date.now(); 
                   if(!lastt) lastt = 0;
-               	  bot.sendMessage(381956489,'Delta: '+now - lastt + '>' + 3600000); 
-               	  console.log(now - lastt + '>' + 3600000);
-                  bot.sendMessage(392957340,'Delta: ' +now - lastt + '>' + 3600000);
+               	  
                	  if(now - lastt > 3600000){
-
+                      bot.sendMessage(381956489,'Delta: '+(now - lastt) + '>' + 3600000); 
+               	      console.log(now - lastt + '>' + 3600000);
+                      bot.sendMessage(392957340,'Delta: ' +(now - lastt) + '>' + 3600000); 
                	      lastt = Date.now();	
 	                  setTimeout(update, 3600000);
 	                  setTimeout(function (){
@@ -948,8 +948,6 @@ startbanking = function() {
 	var bankss = Array.from(banks.keys());
 	console.log(bankss.length);
 	for(var m=0; m<bankss.length; m++){
-		
-
 		(function(s){console.log(bankss[m]); scrapper.csvify(s);})(bankss[m])
 	}
 }
