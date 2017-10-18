@@ -895,7 +895,7 @@ function update(sss,force,categs){
               }
                nacount--;
                consola.info(nacount);
-               bot.sendMessage(381956489,'Remaining news: '+nacount); 
+               bot.sendMessage(381956489,'Remaining news: '+nacount+"\n"+res.link); 
                bot.sendMessage(392957340,'Remaining news:' +nacount);
                 
                //if(nacount===0){
