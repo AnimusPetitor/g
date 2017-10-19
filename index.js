@@ -896,16 +896,16 @@ function update(sss,force,categs){
                nacount--;
                consola.info(nacount);
                bot.sendMessage(381956489,'Remaining news: '+nacount+"\n"+res.link); 
-               bot.sendMessage(392957340,'Remaining news:' +nacount);
+               bot.sendMessage(392957340,'Remaining news:' +nacount+"\n"+res.link);
                 
                //if(nacount===0){
                	  var now = Date.now(); 
                   if(!lastt) lastt = 0;
                	  
                	  if(now - lastt > 3600000){
-                      bot.sendMessage(381956489,'Delta: '+(now - lastt) + '>' + 3600000); 
+                      bot.sendMessage(381956489,'Delta: '+(now - lastt) + '>' + 3600000 + "\n"+firebaseCache.get('__-articles-__').length); 
                	      console.log(now - lastt + '>' + 3600000);
-                      bot.sendMessage(392957340,'Delta: ' +(now - lastt) + '>' + 3600000); 
+                      bot.sendMessage(392957340,'Delta: ' +(now - lastt) + '>' + 3600000 + "\n"+firebaseCache.get('__-articles-__').length); 
                	      lastt = Date.now();	
 	                  setTimeout(update, 3600000);
 	                  setTimeout(function (){
