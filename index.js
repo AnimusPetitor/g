@@ -552,6 +552,10 @@ app.get('/search', (req, res)=>{
    });
 });
 
+app.get('/u', (req, res)=>{
+    update();
+});
+
 app.get('/related', (req, res)=>{
    postRelated(req.query.q, function result(list){
       res.send(list);
@@ -1206,7 +1210,7 @@ function buildShort(){
 if(GAZETA.si)buildSearchI();
 if(GAZETA.index)
   startIndex();
-if(GAZETA.start)
+if(true)
 	//start();
 	update();
 //db.ref('/ethiopia/').set({});
